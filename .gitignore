@@ -1,0 +1,25 @@
+# Godot 4+ 缓存
+.godot/
+
+# Godot 3 遗留
+.import/
+export.cfg
+export_presets.cfg
+
+# 自动生成的翻译文件
+*.translation
+
+# Mono 相关（如果使用 C#）
+.mono/
+data_*/
+mono_crash.*.json
+
+# 构建产物
+build/
+dist/
+*.zip
+
+# 系统与编辑器杂项
+.DS_Store
+Thumbs.db
+*.tmp
