@@ -6,6 +6,7 @@
 - 游戏类型：2D 模拟器游戏（目标平台待补充）。
 - 技术栈：Godot 4.x + GDScript。
 - 仓库地址：https://github.com/pytho-xiangda/lvshjmoniqi.git（GitHub 远端为 `origin`）。
+- 设计文档：`docs/GDD.md` 是项目设计的权威文档，所有系统设计以它为准；设计变更时需同步更新。
 - 主要版本以 `project.godot` 中 `config/features` 声明的 Godot 版本为准；如果与本文冲突，以 `project.godot` 为准并更新本文。
 
 ## 项目结构
