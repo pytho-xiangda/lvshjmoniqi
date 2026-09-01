@@ -60,3 +60,32 @@
 - 与用户使用中文交流。
 - 开始任务前先说明计划；任务完成后总结改动内容与验证结果。
 - 若发现本文与实际项目不一致（例如 Godot 版本升级、目录调整），主动提醒并更新本文。
+
+## 媒体生成工具（MiniMax）
+
+游戏素材（图像/视频）的生成封装在 `scripts/minimax_gen.py`，供 Codex 快速调用。真实 API Key 放在项目根目录 `.env`（已 gitignore，绝不提交），可参照 `.env.example` 填写。
+
+- 配置读取优先级：环境变量 > `.env` > 内置默认值；变量为 `MINIMAX_API_KEY`、`MINIMAX_BASE_URL`（默认 `https://api.minimax.io`）。
+- 图像用 `image-01`，视频用 `MiniMax-H3`（均为 MiniMax 国际版 `Bearer` 鉴权）。
+- 输出目录约定：图像 → `assets/art/`，视频 → `assets/videos/`；用 `--out` 指定文件或目录。
+
+调用示例：
+
+```bash
+# 文生图
+python scripts/minimax_gen.py image --prompt "吉卜力水彩，律所窗外暖棕天空蓝" --out assets/art/scene.png
+
+# 参考图生图（保持一致的人物形象）
+python scripts/minimax_gen.py image --prompt "同一角色站在法院门口" --reference-image ref.png --out assets/art/
+
+# 文生视频
+python scripts/minimax_gen.py video --prompt "云朵缓缓飘过 15s, 16:9" --out assets/videos/sky.mp4
+
+# 图生视频（首帧）
+python scripts/minimax_gen.py video --prompt "让这张图动起来" --image first.png --out assets/videos/court.mp4
+
+# 只打印请求体、不真正调用（用于校验/预览）
+python scripts/minimax_gen.py video --prompt "test" --dry-run
+```
+
+常用参数：`--model`、`--resolution`、`--duration`、`--ratio`、`--aspect-ratio`、`--reference-image/--reference-video/--reference-audio`（视频参考，可多次）、`--poll-interval`、`--max-time`。各子命令可用 `--help` 查看。
