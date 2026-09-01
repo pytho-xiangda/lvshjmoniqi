@@ -65,8 +65,9 @@
 
 游戏素材（图像/视频）的生成封装在 `scripts/minimax_gen.py`，供 Codex 快速调用。真实 API Key 放在项目根目录 `.env`（已 gitignore，绝不提交），可参照 `.env.example` 填写。
 
-- 配置读取优先级：环境变量 > `.env` > 内置默认值；变量为 `MINIMAX_API_KEY`、`MINIMAX_BASE_URL`（默认 `https://api.minimax.io`）。
-- 图像用 `image-01`，视频用 `MiniMax-H3`（均为 MiniMax 国际版 `Bearer` 鉴权）。
+- 配置读取优先级：环境变量 > `.env` > 内置默认值；变量为 `MINIMAX_API_KEY`、`MINIMAX_BASE_URL`。
+- ⚠️ 基址必须与你的 Key 来源一致：大陆版平台（platform.minimaxi.com）用 `https://api.minimaxi.com`，国际版平台（platform.minimax.io）用 `https://api.minimax.io`，两者 Key 不通用。本项目当前使用大陆版 `.com`（在 `.env` 中指定）。
+- 图像用 `image-01`，视频用 `MiniMax-H3`（均为 `Bearer` 鉴权，无需 GroupId）。
 - 输出目录约定：图像 → `assets/art/`，视频 → `assets/videos/`；用 `--out` 指定文件或目录。
 
 调用示例：
