@@ -9,6 +9,7 @@
 - 设计文档：`docs/GDD.md` 是项目设计的权威文档，所有系统设计以它为准；设计变更时需同步更新。
 - 跨任务共享上下文：设计产出统一放 `docs/design/`，各任务共用该目录与 git 仓库；关键产出在本文件登记路径。
 - 美术基准：`assets/art/main_menu_concept.png`；统一美术、人物立绘与 UI 执行规范：`docs/design/art/art_direction.md`；生成提示词：`docs/design/art/generation_prompts.md`。后续美术默认沿用此风格。
+- 庭审主要战斗场景与非写实卡牌风格探索：`docs/design/art/battle_cards.md`；对应图片放在 `assets/art/battle/` 与 `assets/art/cards/`。
 - 主要版本以 `project.godot` 中 `config/features` 声明的 Godot 版本为准；如果与本文冲突，以 `project.godot` 为准并更新本文。
 
 ## 项目结构
