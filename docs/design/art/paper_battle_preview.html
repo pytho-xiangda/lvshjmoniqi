@@ -26,14 +26,16 @@
         <path d="M220 584 Q630 520 800 527 Q1010 530 1370 600"/>
         <circle cx="800" cy="527" r="7"/>
       </svg>
-      <div class="actor player" id="player"><img class="puppet" src="../../../assets/art/characters/paper_battle/player.png" alt="玩家律师，纸层拼贴立绘，背景待处理"></div>
-      <div class="actor opponent" id="opponent"><img class="puppet" src="../../../assets/art/characters/paper_battle/opponent.png" alt="对方律师，纸层拼贴立绘，背景待处理"></div>
-      <div class="actor judge" id="judge"><img class="puppet" src="../../../assets/art/characters/paper_battle/judge.png" alt="法官王建国，纸层拼贴立绘，背景待处理"></div>
+      <div class="actor player" id="player"><img class="puppet" src="../../../assets/art/characters/paper_battle/player_dark_v2.png" alt="玩家律师，持卷陈述"></div>
+      <div class="actor opponent" id="opponent"><img class="puppet" src="../../../assets/art/characters/paper_battle/boss_banquet_v1.png" alt="宴席客，腹部渗出油脂与酒液的勾兑型对方当事人"></div>
+      <div class="actor judge" id="judge"><img class="puppet" src="../../../assets/art/characters/paper_battle/judge_shadow_v2.png" alt="法官低头隐在阴影中，双手撑桌"></div>
       <div class="desk-mask mask-left" aria-hidden="true"></div>
       <div class="desk-mask mask-right" aria-hidden="true"></div>
       <div class="desk-mask mask-judge" aria-hidden="true"></div>
       <div class="actor-tag tag-player"><span>我方代理律师</span><b>理清证据，陈述事实</b></div>
-      <div class="actor-tag tag-opponent"><span>对方代理律师</span><b id="intent">下一步：质疑证据</b></div>
+      <div class="actor-tag tag-opponent"><span>宴席客 · 对方当事人</span><b id="intent">正在酝酿酒局</b></div>
+      <section class="boss-intent" aria-label="对手招式预告"><span>觥筹交错</span><b id="boss-countdown">3 回合后发动</b><div class="boss-meter" role="meter" aria-label="酒局蓄势" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><i id="boss-fill"></i></div><small id="boss-tell">油脂开始渗出 · 发动时心证 −8</small><p>弱点：发动回合出示程序卡，可打断这次酒局。</p></section>
+      <svg class="influence-trail" viewBox="0 0 1600 900" aria-hidden="true"><path class="wine-trail" d="M1300 485 C1150 595 1015 570 940 455 S870 351 807 328"/><path class="oil-trail" d="M1310 490 C1140 564 1030 590 946 453 S874 360 810 333"/></svg>
       <header class="game-heading"><span class="eyebrow">THE PAPER COURT</span><h1>一纸之辩</h1><p>民事庭审 · 法庭调查</p></header>
       <ol class="phases" aria-label="庭审阶段"><li>开庭准备</li><li aria-current="step">法庭调查</li><li>法庭辩论</li><li>最后陈述</li><li>调解或宣判</li></ol>
       <div class="conviction-panel"><span>法官心证</span><strong id="conviction-number">50</strong><span>/ 100</span><div class="meter" role="meter" aria-label="法官心证" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><i id="conviction-fill"></i></div><small>王建国 · 审判席</small></div>
@@ -47,7 +49,7 @@
       <div class="scene-footer"><span>纸境 / 01</span><span>插画 29% · 效果区 42% · 独立可读文字</span></div>
     </main>
   </div>
-  <p class="help">先选牌再出牌；Esc 取消选择。自动演示会展示人物、场景和卡牌的反馈。减少动态会停用环境循环、倾斜与飞行。当前人物为原始设定图，棋盘格背景待抠图处理。</p>
+  <p class="help">先选牌再出牌；Esc 取消。宴席客每 3 回合发动酒局，可在发动回合用程序卡打断。数值为演示草案。角色采用深色背景设定图与界面渐隐合成，尚非透明骨骼资源。</p>
   <script src="paper_battle_preview.js"></script>
 </body>
 </html>

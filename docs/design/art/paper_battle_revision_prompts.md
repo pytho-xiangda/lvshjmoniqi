@@ -1,0 +1,21 @@
+# 阴影法官与宴席客：最终生成提示词
+
+2026-09-08。使用内置 image_gen；下列图均为深色不透明背景设定图。原始文件保留，预览消费版本化新文件。
+
+## judge_shadow_v2.png
+
+参考：旧法官与超现实纸境场景。
+
+Use case: stylized-concept / character redesign. Image 1 is the judge identity and paper collage material reference. Image 2 is the court material reference. Generate ONE finished game character presentation asset, 4:3 landscape. Redesign the same elderly Chinese male judge as a subdued neutral shadow presence. Waist-up behind a low horizontal layered-paper courtroom desk. BOTH HANDS planted palm-down shoulder-width apart on the tabletop, fingers visible bearing his weight, elbows angled out slightly; leaning forward a little, head lowered. Face is 85 percent buried in matte charcoal shadow: eyes entirely hidden by deep brow shadow, no glowing eyes, only a very subtle edge on nose and jaw and sparse gray hair rim. Black paper robe merges into dark background, desaturated dim hands, restrained small burgundy collar. Figure occupies central 65 percent of canvas, hands at 70 percent canvas height, low desk front fills bottom quarter. Background uniform near-black blue charcoal #101820 with faint paper grain. A calm withdrawn adjudicator, NOT a threatening boss, no halo or spotlight, no dramatic throne. Precise sculpted torn-paper planes, visible layered paper edges, ink washes and fine fibrous texture matching reference 2, nonphotorealistic premium 2D game art. No text, no UI, no cards, no checkerboard. Preserve age and formal judicial identity, replace standing folder-holding pose completely.
+
+## boss_banquet_v1.png
+
+参考：超现实纸境场景。对手改为新的虚构当事人。
+
+Use case: stylized-concept. Asset type: surreal 2D courtroom BOSS character art, vertical 3:4. The supplied courtroom is the ONLY art/material reference. Create a NEW fictional middle-aged Chinese male opposing litigant, a wealthy relationship-fixer and banquet broker, NOT a lawyer. Character design externalizes his ability to grease palms and cultivate connections. A grotesquely corpulent, immense pear-shaped paper body, tiny calculating head sunken between shoulders, receding slick black hair, narrow shadowed eyes and a crooked ingratiating smile. Vast inflated belly is 60 percent of the silhouette, shaped like a swollen wine vat made from layered greasy ivory paper and charcoal suit panels; anatomy deliberately exceeds human proportions. A tight burgundy banquet waistcoat and loosened patterned necktie barely span the belly; little brass cufflinks, thick stubby fingers. The belly's paper folds seep clearly visible viscous amber-black OIL and burgundy WINE through folds and seams, forming long heavy drops and a spreading pool with twisting tendrils reaching LEFT toward an unseen judge. Use glossy ink and translucent lacquered paper to portray the liquid, NOT flesh wounds, blood, organs or pus. One pudgy hand casually raises a tiny stemmed wine glass as if toasting someone in power; the other rests possessively on the vast belly. Threat comes from his scale, predatory friendliness, and encroaching oil, not physical weapons. Three-quarter view facing LEFT, strong unequal silhouette, knees and feet diminutive below immense torso, entire figure visible with generous dark margin. Restrained cold charcoal and navy ground #101820, ivory greasy paper, dark wine red and dull dirty amber accents; no warm welcoming restaurant atmosphere. Precise sculptural layered torn-paper collage with thick beveled edges, dramatic ink shadows, tactile printmaking grain, strongly stylized face and impossible proportions, high-end game art rather than a photograph. Background is a dark ink void, no setting, no UI, no words, no checkerboard. Character and leaking abdomen must read clearly at small game scale.
+
+## player_dark_v2.png
+
+编辑目标：原玩家立绘。替换其背景，保持角色造型。
+
+Use case: precise-object-edit. Edit the provided existing paper-collage player lawyer illustration. Change ONLY the checkerboard background to a uniform near-black blue charcoal #101820 with subtle paper grain. Preserve the male lawyer's face, hairstyle, clothes, exact silhouette, rightward pose, outstretched hand, folder, and entire body. Keep original dimensions and composition. No checkerboard, no transparency, no new props or people, no text. This is a dark-background game character presentation asset.

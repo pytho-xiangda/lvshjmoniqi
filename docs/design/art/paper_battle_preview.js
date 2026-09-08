@@ -11,6 +11,7 @@ const cards=[
 ];
 let selected=null,busy=false,conviction=50,clues=0,shield=0,round=1;
 let used=new Set(),autoTimer=null,automatic=false,epoch=0;
+let bossCharge=0,procedureThisTurn=false;
 const reduceMedia=window.matchMedia("(prefers-reduced-motion: reduce)");
 let reduced=reduceMedia.matches,paused=false;
 function resize(){const scale=viewport.clientWidth/1600;stage.style.transform=`scale(${scale})`;viewport.style.height=`${900*scale}px`;}
@@ -22,12 +23,20 @@ function renderHand(){
 function status(text){get("status").textContent=text;}
 function selectCard(id){if(busy)return;const card=cards.find(c=>c.id===id);if(!card||card.locked||used.has(id))return;selected=id;renderHand();get("play").disabled=false;get("play").textContent=`出示「${card.name}」`;status(`${card.name}已选中。确认后生效；Esc 可取消。`);}
 function cancelSelection(){if(busy)return;selected=null;renderHand();get("play").disabled=true;get("play").textContent="选中后出牌";status("已取消。选择其他材料继续举证。");}
-function updateHud(){get("conviction-number").textContent=conviction;get("conviction-fill").style.width=`${conviction}%`;stage.querySelector(".meter").setAttribute("aria-valuenow",conviction);get("clue-label").textContent=`伏笔 ${clues}`;get("round-label").textContent=`第 ${round} 回合`;}
+function updateHud(){get("conviction-number").textContent=conviction;get("conviction-fill").style.width=`${conviction}%`;stage.querySelector(".meter").setAttribute("aria-valuenow",conviction);get("clue-label").textContent=`伏笔 ${clues}`;get("round-label").textContent=`第 ${round} 回合`;updateBoss();}
+function updateBoss(){
+  const ready=bossCharge>=2;stage.classList.toggle("boss-ready",ready);
+  get("boss-countdown").textContent=ready?"本回合结束时发动":`${3-bossCharge} 回合后发动`;
+  get("boss-fill").style.width=`${bossCharge/3*100}%`;
+  stage.querySelector(".boss-meter").setAttribute("aria-valuenow",bossCharge);
+  get("boss-tell").textContent=ready?(procedureThisTurn?"程序回应已准备 · 将打断酒局":"举杯预警 · 酒液将侵入审判席"):bossCharge===1?"腹部鼓胀 · 油膜正在扩散":"油脂开始渗出 · 发动时心证 −8";
+  get("intent").textContent=ready?"意图：觥筹交错 · 心证 −8":"意图：狡辩并酝酿酒局";
+}
 const rest=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function animateActor(id,kind="argue"){
   if(reduced||paused)return;
   const toward=id==="opponent"?-1:1;
-  const frames=kind==="nod"?[{transform:"rotate(0deg)"},{transform:"rotate(1.4deg) translateY(3px)"},{transform:"rotate(0deg)"}]:[{transform:"translateX(0)"},{transform:`translateX(${12*toward}px) rotate(${1.6*toward}deg)`},{transform:"translateX(0)"}];
+  const frames=kind==="nod"?[{transform:"scaleY(1)"},{transform:"scaleY(.996)"},{transform:"scaleY(1)"}]:[{transform:"translateX(0)"},{transform:`translateX(${12*toward}px) rotate(${1.6*toward}deg)`},{transform:"translateX(0)"}];
   await get(id).animate(frames,{duration:kind==="nod"?540:680,easing:"ease-in-out"}).finished.catch(()=>{});
 }
 async function impact(text){get("impact-text").textContent=text;if(reduced||paused)return;await get("impact").animate([{opacity:0,transform:"scale(.82)"},{opacity:1,transform:"scale(1)",offset:.25},{opacity:0,transform:"scale(1.06)"}],{duration:850,easing:"ease-out"}).finished.catch(()=>{});}
@@ -45,25 +54,33 @@ async function playCard(){
   if(busy||!selected)return;const card=cards.find(c=>c.id===selected);if(!card||card.locked||used.has(card.id))return;
   const turnEpoch=epoch;busy=true;get("play").disabled=true;get("end-turn").disabled=true;status(`正在出示「${card.name}」……`);
   await Promise.all([flyCard(card.id),animateActor("player")]);if(turnEpoch!==epoch)return;
-  let delta=0;if(card.id==="transfer"){if(clues>0)delta=6;else clues++;}else if(card.id==="note")delta=clues>0?6:4;else if(card.id==="question"){delta=3;shield+=2;}else if(card.id==="procedure"){delta=2;shield+=2;}
+  let delta=0;if(card.id==="transfer"){if(clues>0)delta=6;else clues++;}else if(card.id==="note")delta=clues>0?6:4;else if(card.id==="question"){delta=3;shield+=2;}else if(card.id==="procedure"){delta=2;shield+=2;procedureThisTurn=true;}
   conviction=Math.min(100,conviction+delta);used.add(card.id);selected=null;updateHud();renderHand();
   await Promise.all([impact(delta?`心证 +${delta}`:"伏笔已建立"),animateActor("judge","nod")]);if(turnEpoch!==epoch)return;
   busy=false;get("end-turn").disabled=false;get("play").textContent="选中后出牌";status(`「${card.name}」已生效。${delta?`心证 +${delta}。`:"获得 1 枚伏笔。"}${card.once?"本场移除。":"下回合恢复。"}`);
 }
 async function endTurn(){
   if(busy)return;busy=true;selected=null;get("play").disabled=true;get("end-turn").disabled=true;renderHand();const turnEpoch=epoch;
-  status("对方正在质疑证据……");get("intent").textContent="正在质疑证据";
+  stage.classList.remove("boss-influenced");status("宴席客正在狡辩……");get("intent").textContent="正在狡辩";
   await animateActor("opponent");if(turnEpoch!==epoch)return;
-  const loss=Math.max(0,3-shield);conviction=Math.max(0,conviction-loss);shield=0;round++;cards.filter(c=>!c.once).forEach(c=>used.delete(c.id));updateHud();renderHand();
+  bossCharge++;let banquetLoss=0,banquetText="";const erupted=bossCharge>=3;
+  if(erupted){
+    if(procedureThisTurn){banquetText="程序回应命中弱点，酒局被打断。";await impact("酒局被打断");}
+    else{banquetLoss=8;stage.classList.add("boss-casting");status("觥筹交错：酒液正在侵入审判席……");await rest(reduced||paused?60:1000);}
+    if(turnEpoch!==epoch)return;
+    stage.classList.remove("boss-casting");bossCharge=0;
+    if(banquetLoss){stage.classList.add("boss-influenced");banquetText="觥筹交错发动，额外施加 8 点心证压力。";}
+  }
+  const loss=Math.max(0,3+banquetLoss-shield);conviction=Math.max(0,conviction-loss);shield=0;procedureThisTurn=false;round++;cards.filter(c=>!c.once).forEach(c=>used.delete(c.id));updateHud();renderHand();
   await impact(loss?`心证 −${loss}`:"程序回应生效");if(turnEpoch!==epoch)return;
-  status(`对方质疑：心证 −${loss}。进入第 ${round} 回合，循环卡已恢复。`);get("intent").textContent="下一步：质疑证据";busy=false;get("end-turn").disabled=false;get("play").textContent="选中后出牌";
+  status(`${banquetText}本次心证 −${loss}。第 ${round} 回合，循环卡已恢复。`);busy=false;get("end-turn").disabled=false;get("play").textContent="选中后出牌";
 }
 function stopAuto(){automatic=false;clearTimeout(autoTimer);get("auto").setAttribute("aria-pressed","false");get("auto").textContent="自动演示";}
 function autoStep(){if(!automatic)return;if(!busy){const available=cards.find(c=>!c.locked&&!used.has(c.id));if(available){if(selected===available.id)playCard();else selectCard(available.id);}else endTurn();}autoTimer=setTimeout(autoStep,1800);}
 get("auto").onclick=()=>{if(automatic)stopAuto();else{automatic=true;get("auto").setAttribute("aria-pressed","true");get("auto").textContent="停止演示";autoStep();}};
 function syncMotion(){stage.classList.toggle("reduced",reduced);stage.classList.toggle("paused",paused);get("reduce").setAttribute("aria-pressed",String(reduced));get("pause").setAttribute("aria-pressed",String(paused));get("pause").textContent=paused?"恢复律动":"暂停律动";if(reduced||paused)stage.getAnimations({subtree:true}).filter(a=>!(a instanceof CSSAnimation)).forEach(a=>a.finish());}
 get("pause").onclick=()=>{paused=!paused;syncMotion();};get("reduce").onclick=()=>{reduced=!reduced;syncMotion();};reduceMedia.addEventListener("change",e=>{reduced=e.matches;syncMotion();});
-get("reset").onclick=()=>{epoch++;stopAuto();stage.getAnimations({subtree:true}).filter(a=>!(a instanceof CSSAnimation)).forEach(a=>a.cancel());stage.querySelectorAll(".flying-card").forEach(e=>e.remove());selected=null;busy=false;conviction=50;clues=0;shield=0;round=1;used.clear();updateHud();renderHand();get("play").disabled=true;get("end-turn").disabled=false;get("play").textContent="选中后出牌";get("intent").textContent="下一步：质疑证据";status("卷宗已展开。选择一张牌，开始举证。");};
+get("reset").onclick=()=>{epoch++;stopAuto();stage.getAnimations({subtree:true}).filter(a=>!(a instanceof CSSAnimation)).forEach(a=>a.cancel());stage.querySelectorAll(".flying-card").forEach(e=>e.remove());selected=null;busy=false;conviction=50;clues=0;shield=0;round=1;bossCharge=0;procedureThisTurn=false;stage.classList.remove("boss-casting","boss-influenced");used.clear();updateHud();renderHand();get("play").disabled=true;get("end-turn").disabled=false;get("play").textContent="选中后出牌";status("卷宗已展开。选择一张牌，开始举证。");};
 get("play").onclick=playCard;get("end-turn").onclick=endTurn;document.addEventListener("keydown",e=>{if(e.key==="Escape")cancelSelection();});
 for(let i=0;i<16;i++){const mote=document.createElement("i");mote.className="mote";mote.style.left=`${60+(i*139)%1480}px`;mote.style.top=`${290+(i*53)%310}px`;mote.style.setProperty("--time",`${11+i%6}s`);mote.style.setProperty("--delay",`${-i*.83}s`);stage.querySelector(".paper-wind").append(mote);}
 syncMotion();renderHand();updateHud();
