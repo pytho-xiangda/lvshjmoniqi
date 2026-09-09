@@ -1,0 +1,15 @@
+{
+  "title": "草地上的云",
+  "duration_seconds": 98.14439909297052,
+  "sample_rate": 44100,
+  "channels": 2,
+  "bits": 16,
+  "preset": "Grand Piano",
+  "soundfont_sha256": "9575028c7a1f589f5770fccc8cff2734566af40cd26ed836944e9a5152688cfe",
+  "peak_dbfs": -5.000377362660108,
+  "rms_dbfs": -22.80354710137583,
+  "clipped_samples": 0,
+  "note_count": 154,
+  "sha256": "e016350f8b9bff350705761d5de5755a883ff51093fe78c161f8fa2910b3073d",
+  "loop": false
+}
