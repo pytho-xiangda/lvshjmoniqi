@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>纸境庭审 · 战斗音乐</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#10131c;color:#e6e2db;font:16px/1.65 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1040px;margin:auto;padding:64px 28px}header{border-bottom:1px solid #454755;padding-bottom:30px;margin-bottom:30px}.eyebrow{color:#a0aac5;letter-spacing:.22em;font-size:12px}h1{font-size:clamp(30px,5vw,48px);margin:10px 0;font-weight:650}header p{color:#aeb3c2;max-width:680px}section{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}article{background:linear-gradient(135deg,#222736,#191d29);border:1px solid #3b4052;border-top:3px solid var(--accent);padding:24px}article:last-child{grid-column:1/-1}.num{font:12px monospace;letter-spacing:.12em;color:var(--accent)}h2{font-size:23px;margin:10px 0 4px}.scene{color:var(--accent);font-size:14px}.desc{color:#b0b6c7;font-size:14px;min-height:48px}.meta{font-size:12px;color:#a1a9bc;word-spacing:.35em;margin:18px 0 12px}audio{width:100%;height:42px}a{color:#ced7ff;font-size:13px;text-underline-offset:4px}.foot{display:flex;justify-content:space-between;gap:12px;margin-top:14px}.foot span,footer{font-size:12px;color:#929bad}footer{margin-top:28px}.toggle{font-size:14px;color:#c0c6d5;display:flex;gap:8px;align-items:center}input{accent-color:#899cca}@media(max-width:680px){main{padding:32px 18px}section{grid-template-columns:1fr}article:last-child{grid-column:auto}}
+</style>
+<main>
+<header><div class="eyebrow">PAPER COURT / BATTLE MUSIC VOL. 01</div><h1>纸境庭审 · 战斗音乐</h1><p>五种对抗情绪：从阴影中的试探，到逼近宣判的最后反击。以复古合成音色、紧张小调与节奏变化配合超现实纸境。</p><label class="toggle"><input id="loop" type="checkbox" checked>循环试听</label></header>
+<section>
+<article style="--accent:#a8b7df"><div class="num">01 / PRESSURE</div><h2>阴影审判席</h2><div class="scene">开庭压迫 · 回合思考</div><p class="desc">低音脉冲与克制的三角波旋律，给读牌与判断保留空间。</p><div class="meta">84 BPM · D Phrygian · 4/4 · 01:31</div><audio controls loop preload="metadata" src="../../../assets/audio/bgm/court_16bits/01_shadow_bench.wav"></audio><div class="foot"><a download href="../../../assets/audio/bgm/court_16bits/01_shadow_bench.wav">下载 WAV</a><span>32 小节</span></div></article>
+<article style="--accent:#91c6cb"><div class="num">02 / EXCHANGE</div><h2>证据交锋</h2><div class="scene">常规举证 · 连续攻防</div><p class="desc">短音、推动节奏与来回质证的紧迫感，适合卡牌连携。</p><div class="meta">118 BPM · D minor · 4/4 · 01:21</div><audio controls loop preload="metadata" src="../../../assets/audio/bgm/court_16bits/02_evidence_clash.wav"></audio><div class="foot"><a download href="../../../assets/audio/bgm/court_16bits/02_evidence_clash.wav">下载 WAV</a><span>40 小节</span></div></article>
+<article style="--accent:#b39bd0"><div class="num">03 / BANQUET BOSS</div><h2>觥筹暗涌</h2><div class="scene">宴席客 · 勾兑招式蓄势</div><p class="desc">5/4 错拍、半音关系与轻微摇晃的音色，呈现失衡而狡诈的威胁。</p><div class="meta">90 BPM · D Phrygian · 5/4 · 01:20</div><audio controls loop preload="metadata" src="../../../assets/audio/bgm/court_16bits/03_oily_banquet.wav"></audio><div class="foot"><a download href="../../../assets/audio/bgm/court_16bits/03_oily_banquet.wav">下载 WAV</a><span>24 小节</span></div></article>
+<article style="--accent:#d693a0"><div class="num">04 / OBJECTION</div><h2>异议反击</h2><div class="scene">破绽触发 · 高强度战斗</div><p class="desc">锐利的锯齿波与方波攻势、密集动机，是这组中强度最高的一段。</p><div class="meta">136 BPM · E harmonic minor · 4/4 · 01:25</div><audio controls loop preload="metadata" src="../../../assets/audio/bgm/court_16bits/04_rebuttal_surge.wav"></audio><div class="foot"><a download href="../../../assets/audio/bgm/court_16bits/04_rebuttal_surge.wav">下载 WAV</a><span>48 小节</span></div></article>
+<article style="--accent:#bec5d1"><div class="num">05 / FINAL STATEMENT</div><h2>最后陈述</h2><div class="scene">终局辩论 · 宣判前</div><p class="desc">庄重的小调和声与持续低音维持终局压力，结尾回到循环而不作胜利收束。</p><div class="meta">104 BPM · C harmonic minor · 4/4 · 01:32</div><audio controls loop preload="metadata" src="../../../assets/audio/bgm/court_16bits/05_final_statement.wav"></audio><div class="foot"><a download href="../../../assets/audio/bgm/court_16bits/05_final_statement.wav">下载 WAV</a><span>40 小节</span></div></article>
+</section><footer>44.1 kHz / 16-bit PCM / 单声道 · 峰值 −3 dBFS · 本地程序化生成<br>同一时间只播放一首。循环保持完整小节长度；游戏内可另做音乐切换的交叉淡化。</footer>
+</main>
+<script>
+const players=[...document.querySelectorAll('audio')];
+for(const player of players){player.volume=.55;player.addEventListener('play',()=>{for(const other of players)if(other!==player)other.pause()})}
+document.getElementById('loop').addEventListener('change',event=>{for(const player of players)player.loop=event.target.checked});
+</script>
+</html>

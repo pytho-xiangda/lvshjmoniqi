@@ -1,0 +1,48 @@
+{
+  "source": "https://github.com/Matuyuhi/16bits-audio-mcp",
+  "revision": "99a46c4057794ae4acc32105f95255a97f1e9277",
+  "license": "MIT",
+  "sample_rate": 44100,
+  "tracks": [
+    {
+      "id": "01_shadow_bench", "title": "阴影审判席", "scene": "开庭压迫／回合思考",
+      "style": "dungeon", "bpm": 84, "duration_bars": 32, "beats_per_bar": 4,
+      "key": "D", "scale": "phrygian", "seed": 26090901, "melody_density": 4, "swing": 0,
+      "chords": ["D:minor", "Eb:major", "D:minor", "A:sus4", "Bb:major", "G:minor", "Eb:major", "A:seventh"],
+      "effects": [{"type": "highpass", "cutoff_hz": 35}, {"type": "lowpass", "cutoff_hz": 5400}],
+      "description": "低音脉冲、克制的三角波旋律与阴暗和声，给读牌和判断保留空间。"
+    },
+    {
+      "id": "02_evidence_clash", "title": "证据交锋", "scene": "常规举证／连续攻防",
+      "style": "battle", "bpm": 118, "duration_bars": 40, "beats_per_bar": 4,
+      "key": "D", "scale": "minor", "seed": 26090902, "melody_density": 7, "swing": 0.05,
+      "chords": ["D:minor", "G:minor", "Bb:major", "A:seventh", "D:minor", "C:major", "G:minor", "A:sus4"],
+      "effects": [{"type": "highpass", "cutoff_hz": 35}, {"type": "lowpass", "cutoff_hz": 6500}],
+      "description": "清晰的短音与推动节奏，适合来回质证、证据打断和卡牌连携。"
+    },
+    {
+      "id": "03_oily_banquet", "title": "觥筹暗涌", "scene": "宴席客／勾兑招式蓄势",
+      "style": "puzzle", "bpm": 90, "duration_bars": 24, "beats_per_bar": 5,
+      "key": "D", "scale": "phrygian", "seed": 26090903, "melody_density": 5, "swing": 0.26,
+      "chords": ["D:minor", "Eb:major", "D:minor", "Bb:minor", "G:minor", "Eb:major", "A:diminished", "A:seventh"],
+      "effects": [{"type": "chorus", "depth": 0.35, "rate": 0.35, "wet": 0.16}, {"type": "highpass", "cutoff_hz": 40}, {"type": "lowpass", "cutoff_hz": 4300}],
+      "description": "5/4 错拍、阴暗半音关系和轻微摇晃的合成音色，塑造宴席客失衡而狡诈的压迫感。"
+    },
+    {
+      "id": "04_rebuttal_surge", "title": "异议反击", "scene": "破绽触发／高强度战斗",
+      "style": "boss", "bpm": 136, "duration_bars": 48, "beats_per_bar": 4,
+      "key": "E", "scale": "harmonic_minor", "seed": 26090904, "melody_density": 8, "swing": 0,
+      "chords": ["E:minor", "D:major", "C:major", "B:seventh", "E:minor", "A:minor", "C:major", "B:seventh"],
+      "effects": [{"type": "highpass", "cutoff_hz": 40}, {"type": "lowpass", "cutoff_hz": 6200}],
+      "description": "锯齿波与方波的锐利攻势、密集动机和稳定鼓点，作为五首中强度最高的反击段。"
+    },
+    {
+      "id": "05_final_statement", "title": "最后陈述", "scene": "终局辩论／宣判前",
+      "style": "castle", "bpm": 104, "duration_bars": 40, "beats_per_bar": 4,
+      "key": "C", "scale": "harmonic_minor", "seed": 26090905, "melody_density": 6, "swing": 0,
+      "chords": ["C:minor", "Ab:major", "F:minor", "G:seventh", "C:minor", "Ab:major", "D:diminished", "G:seventh"],
+      "effects": [{"type": "highpass", "cutoff_hz": 35}, {"type": "lowpass", "cutoff_hz": 5800}],
+      "description": "较庄重的小调和声与持续低音，维持终局压力，结尾回到循环而不作胜利收束。"
+    }
+  ]
+}

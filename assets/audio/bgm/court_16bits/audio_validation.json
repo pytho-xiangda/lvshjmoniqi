@@ -1,0 +1,81 @@
+{
+  "source": "https://github.com/Matuyuhi/16bits-audio-mcp",
+  "revision": "99a46c4057794ae4acc32105f95255a97f1e9277",
+  "tracks": [
+    {
+      "id": "01_shadow_bench",
+      "title": "阴影审判席",
+      "frames": 4032000,
+      "sample_rate": 44100,
+      "channels": 1,
+      "bits": 16,
+      "duration_seconds": 91.428571,
+      "peak_dbfs": -3.0,
+      "rms_dbfs": -17.536,
+      "clipped_samples": 0,
+      "loop_boundary_delta": 0,
+      "sha256": "5d5bfe2960b8a0ba054c2c0102c84c310eb9be52798bdeace8e10fa94cca9b64"
+    },
+    {
+      "id": "02_evidence_clash",
+      "title": "证据交锋",
+      "frames": 3587796,
+      "sample_rate": 44100,
+      "channels": 1,
+      "bits": 16,
+      "duration_seconds": 81.355918,
+      "peak_dbfs": -3.0,
+      "rms_dbfs": -18.935,
+      "clipped_samples": 0,
+      "loop_boundary_delta": 0,
+      "sha256": "8d2cb20cdfaa093ef64267cf23c1cedd1b26e3c824327ec3b2afc9d36782e1b7"
+    },
+    {
+      "id": "03_oily_banquet",
+      "title": "觥筹暗涌",
+      "frames": 3528000,
+      "sample_rate": 44100,
+      "channels": 1,
+      "bits": 16,
+      "duration_seconds": 80.0,
+      "peak_dbfs": -3.0,
+      "rms_dbfs": -19.104,
+      "clipped_samples": 0,
+      "loop_boundary_delta": 0,
+      "sha256": "c8d65125bd9239c88cb8cee4de43574a27c2758817d33384c5365fb31b4e2164"
+    },
+    {
+      "id": "04_rebuttal_surge",
+      "title": "异议反击",
+      "frames": 3735529,
+      "sample_rate": 44100,
+      "channels": 1,
+      "bits": 16,
+      "duration_seconds": 84.705873,
+      "peak_dbfs": -3.0,
+      "rms_dbfs": -16.707,
+      "clipped_samples": 0,
+      "loop_boundary_delta": 0,
+      "sha256": "cfccc009cb246a7111246ea94e88e13ed41cebe5d272bc0350f7c39e3b94ee82"
+    },
+    {
+      "id": "05_final_statement",
+      "title": "最后陈述",
+      "frames": 4070769,
+      "sample_rate": 44100,
+      "channels": 1,
+      "bits": 16,
+      "duration_seconds": 92.307687,
+      "peak_dbfs": -3.0,
+      "rms_dbfs": -17.946,
+      "clipped_samples": 0,
+      "loop_boundary_delta": 0,
+      "sha256": "1c787000b3e3b65ac51803c69dd74bdd62775ac25e6e96a0096d61079b89e2c6"
+    }
+  ],
+  "server": {
+    "name": "16bits-audio-mcp",
+    "version": "0.6.0"
+  },
+  "tool_count": 10
+}

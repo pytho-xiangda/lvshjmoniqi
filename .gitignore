@@ -32,3 +32,6 @@ __pycache__/
 .DS_Store
 Thumbs.db
 *.tmp
+
+# 本地音频 MCP 源码、编译器与构建缓存
+.audio_runtime/

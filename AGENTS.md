@@ -12,6 +12,8 @@
 - 庭审主要战斗场景与非写实卡牌风格探索：`docs/design/art/battle_cards.md`；对应图片放在 `assets/art/battle/` 与 `assets/art/cards/`。
 - 已确认庭审方向为“超现实纸境＋纸境卡牌”；人物与动效规范：`docs/design/art/paper_battle_motion.md`；动态预览：`docs/design/art/paper_battle_preview.html`。
 - 庭审对手不限于律师，角色特征可外化为非写实躯体与周期招式；阴影法官与勾兑型「宴席客」规范：`docs/design/art/boss_banquet.md`。
+- 庭审战斗 BGM：`docs/design/audio/court_bgm_16bits.md`；五首音频在 `assets/audio/bgm/court_16bits/`，试听页为 `docs/design/audio/court_bgm_preview.html`。
+- 当前仓库尚未创建 `project.godot`，因此 Godot 导入与运行验证需待工程入口建立后执行。
 - 主要版本以 `project.godot` 中 `config/features` 声明的 Godot 版本为准；如果与本文冲突，以 `project.godot` 为准并更新本文。
 
 ## 项目结构
