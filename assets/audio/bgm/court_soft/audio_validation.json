@@ -1,0 +1,25 @@
+{
+  "source": "https://github.com/Matuyuhi/16bits-audio-mcp",
+  "revision": "99a46c4057794ae4acc32105f95255a97f1e9277",
+  "tracks": [
+    {
+      "id": "06_quiet_deliberation",
+      "title": "纸页间的沉思",
+      "frames": 3735529,
+      "sample_rate": 44100,
+      "channels": 1,
+      "bits": 16,
+      "duration_seconds": 84.705873,
+      "peak_dbfs": -3.0,
+      "rms_dbfs": -19.162,
+      "clipped_samples": 0,
+      "loop_boundary_delta": 0,
+      "sha256": "1a76458da94102ca81302d98e155a95a0eed05be832f6e0f8e90d9bc96b634af"
+    }
+  ],
+  "server": {
+    "name": "16bits-audio-mcp",
+    "version": "0.6.0"
+  },
+  "tool_count": 10
+}

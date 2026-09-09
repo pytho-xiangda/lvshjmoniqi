@@ -1,0 +1,16 @@
+{
+  "source": "https://github.com/Matuyuhi/16bits-audio-mcp",
+  "revision": "99a46c4057794ae4acc32105f95255a97f1e9277",
+  "license": "MIT",
+  "sample_rate": 44100,
+  "tracks": [
+    {
+      "id": "06_quiet_deliberation", "title": "纸页间的沉思", "scene": "舒缓庭审／读牌与思考",
+      "style": "underwater", "bpm": 68, "duration_bars": 24, "beats_per_bar": 4,
+      "key": "D", "scale": "minor", "seed": 26090906, "melody_density": 3, "swing": 0.06,
+      "chords": ["D:minor", "Bb:major", "F:sus2", "A:sus4", "G:minor", "D:minor", "Bb:major", "A:sus4"],
+      "effects": [{"type": "highpass", "cutoff_hz": 45}, {"type": "lowpass", "cutoff_hz": 2400}],
+      "description": "柔和的正弦音色、缓起音与稀疏旋律；不使用底鼓、军鼓和踩镲，仅保留极轻沙锤。68 BPM 小调与悬挂和弦保留思考感，减弱电子棱角与战斗强度。"
+    }
+  ]
+}

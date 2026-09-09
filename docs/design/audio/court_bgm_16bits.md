@@ -45,3 +45,17 @@ python scripts/generate_court_bgm_16bits.py --out .audio_runtime/reproduce
 - 后续导入 Godot 时启用 WAV 的 Forward 循环，范围为完整文件；切换战斗强度可由游戏音频总线进行交叉淡化。建议先在试听页比较五首，再确定各阶段音乐音量。
 
 早期 `court_bgm_prompts.json` 是云端方案草案；本次成品使用 `court_bgm_16bits.json`，两者音色与拍号不能混作同一版本。
+
+## 舒缓版本：《纸页间的沉思》
+
+根据“电子感不那么强、舒缓一点”的反馈，另增一首 68 BPM、D 小调、4/4、24 小节的版本，时长约 84.71 秒。音频：`assets/audio/bgm/court_soft/06_quiet_deliberation.wav`。
+
+以柔和正弦音色、缓起音、稀疏旋律与悬挂和弦减少尖锐感；不使用底鼓、军鼓或踩镲，仅有极轻沙锤。适合读牌、思考及缓慢交锋。音色仍来自程序化合成，不是真实钢琴或弦乐录音。
+
+配方：`docs/design/audio/court_bgm_soft.json`。使用相同 MCP 和渲染脚本复现：
+
+```powershell
+python scripts/generate_court_bgm_16bits.py --manifest docs/design/audio/court_bgm_soft.json --out .audio_runtime/reproduce-soft
+```
+
+成品为 44.1 kHz、16-bit 单声道 WAV，峰值 −3 dBFS，RMS −19.162 dBFS，无削波，首尾采样差为 0；检查数据位于 `assets/audio/bgm/court_soft/audio_validation.json`。原五首保留，Godot 工程入口缺失的验证限制仍适用。
