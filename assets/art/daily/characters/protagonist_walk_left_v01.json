@@ -1,0 +1,88 @@
+{
+  "columns": 4,
+  "rows": 2,
+  "frame_width": 320,
+  "frame_height": 480,
+  "frame_count": 8,
+  "fps": 8,
+  "foot_anchor": [
+    160,
+    460
+  ],
+  "direction": "left",
+  "alpha": "RGBA; connected-background matte and registration from generated RGB source",
+  "frames": [
+    {
+      "index": 0,
+      "region": [
+        0,
+        0,
+        320,
+        480
+      ]
+    },
+    {
+      "index": 1,
+      "region": [
+        320,
+        0,
+        320,
+        480
+      ]
+    },
+    {
+      "index": 2,
+      "region": [
+        640,
+        0,
+        320,
+        480
+      ]
+    },
+    {
+      "index": 3,
+      "region": [
+        960,
+        0,
+        320,
+        480
+      ]
+    },
+    {
+      "index": 4,
+      "region": [
+        0,
+        480,
+        320,
+        480
+      ]
+    },
+    {
+      "index": 5,
+      "region": [
+        320,
+        480,
+        320,
+        480
+      ]
+    },
+    {
+      "index": 6,
+      "region": [
+        640,
+        480,
+        320,
+        480
+      ]
+    },
+    {
+      "index": 7,
+      "region": [
+        960,
+        480,
+        320,
+        480
+      ]
+    }
+  ]
+}

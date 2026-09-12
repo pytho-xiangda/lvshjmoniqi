@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>午后 · 日常房间</title>
+<link rel="stylesheet" href="daily_room_preview.css">
+<main>
+<header><div><small>律师模拟器 · 日常场景</small><h1>午后的房间</h1></div><div class="tools"><button id="replay">播放进门动画</button><button id="computer">走到电脑前</button><button id="door">走到门口</button></div></header>
+<div class="stage">
+<canvas id="room" width="1672" height="941" aria-label="主角日常房间，左侧电脑桌、右侧木门。使用上方按钮操作主角。"></canvas>
+<button class="spot desk" id="desk-hotspot" aria-label="到电脑桌办公">办公</button>
+<button class="spot exit" id="exit-hotspot" aria-label="走到门口外出">外出</button>
+<section id="panel" hidden aria-live="polite"><button class="close" id="close" aria-label="返回房间">×</button><small id="panel-kicker"></small><h2 id="panel-title"></h2><p id="panel-desc"></p><div id="options"></div><p class="feedback" id="feedback"></p></section>
+</div><footer><span id="status" role="status">正在载入房间…</span><span>方向移动与菜单交互为设计预览</span></footer>
+</main><script src="daily_room_preview.js"></script>
+</html>
