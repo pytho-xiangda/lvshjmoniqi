@@ -1,0 +1,58 @@
+{
+  "view": "fixed_side",
+  "columns": 4,
+  "rows": 1,
+  "frame_width": 384,
+  "frame_height": 530,
+  "frame_count": 4,
+  "fps": 7,
+  "character_height": 470,
+  "foot_anchor": [
+    192,
+    510
+  ],
+  "room_ground_y": 795,
+  "room_door_opening_height_approx": 588,
+  "height_to_door_ratio": 0.799,
+  "direction": "left",
+  "right_direction": "horizontal flip",
+  "alpha": "RGBA; connected-background matte from generated RGB sources",
+  "frames": [
+    {
+      "index": 0,
+      "region": [
+        0,
+        0,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 1,
+      "region": [
+        384,
+        0,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 2,
+      "region": [
+        768,
+        0,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 3,
+      "region": [
+        1152,
+        0,
+        384,
+        530
+      ]
+    }
+  ]
+}
