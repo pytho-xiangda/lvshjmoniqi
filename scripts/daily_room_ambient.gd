@@ -16,6 +16,13 @@ func _draw() -> void:
     _draw_ellipse(Vector2(414.0 + light_drift * 0.7, 816.0), Vector2(126.0, 24.0), Color(1.0, 0.92, 0.68, 0.065), -0.12)
     _draw_ellipse(Vector2(570.0 + light_drift * 0.4, 758.0), Vector2(72.0, 15.0), Color(1.0, 0.94, 0.73, 0.055), -0.16)
 
+    var cloud_progress: float = fmod(elapsed * 12.0, 2050.0) - 260.0
+    _draw_ellipse(Vector2(cloud_progress, 690.0), Vector2(185.0, 38.0), Color(0.31, 0.39, 0.30, 0.022), -0.08)
+    _draw_ellipse(Vector2(cloud_progress - 330.0, 735.0), Vector2(125.0, 27.0), Color(0.28, 0.36, 0.27, 0.018), 0.05)
+
+    var warmth: float = (sin(elapsed * 0.22) + 1.0) * 0.5
+    draw_rect(Rect2(0.0, 0.0, 660.0, 690.0), Color(1.0, 0.88, 0.58, 0.008 + warmth * 0.012), true)
+
     var screen_alpha: float = 0.035 + (sin(elapsed * 1.15) + 1.0) * 0.012
     draw_rect(Rect2(247.0, 446.0, 112.0, 71.0), Color(0.56, 0.78, 0.78, screen_alpha), true)
 
@@ -26,6 +33,12 @@ func _draw() -> void:
         y += cos(elapsed * 0.29 + float(index)) * 7.0
         var alpha: float = 0.08 + float(index % 4) * 0.018
         draw_circle(Vector2(x, y), 1.1 + float(index % 3) * 0.45, Color(1.0, 0.96, 0.78, alpha))
+
+    for index: int in range(7):
+        var mote_x: float = 90.0 + fmod(elapsed * (5.0 + float(index) * 0.7) + float(index * 137), 560.0)
+        var mote_y: float = 630.0 - fmod(elapsed * (7.0 + float(index) * 0.4) + float(index * 83), 420.0)
+        var mote_alpha: float = 0.05 + (sin(elapsed * 1.1 + float(index)) + 1.0) * 0.025
+        draw_circle(Vector2(mote_x, mote_y), 1.3, Color(1.0, 0.94, 0.72, mote_alpha))
 
     var branch_sway: float = sin(elapsed * 0.48) * 5.0
     for index: int in range(12):

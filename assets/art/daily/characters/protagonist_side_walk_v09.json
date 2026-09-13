@@ -1,0 +1,20 @@
+{
+  "view": "fixed_side",
+  "columns": 4,
+  "rows": 3,
+  "frame_width": 448,
+  "frame_height": 640,
+  "frame_count": 12,
+  "fps": 12,
+  "cycle_duration_seconds": 1.0,
+  "character_height": 540,
+  "foot_anchor": [
+    224,
+    610
+  ],
+  "room_ground_y": 795,
+  "motion": "twelve-drawing relaxed walk with continuous procedural weight shift in Godot",
+  "direction": "left",
+  "right_direction": "horizontal flip",
+  "recommended_world_speed_px_per_second": 140
+}

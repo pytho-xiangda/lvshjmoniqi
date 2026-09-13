@@ -2,7 +2,7 @@ extends Node2D
 
 
 const BACKGROUND: Texture2D = preload("res://assets/art/daily/daily_room_side_v04.png")
-const WALK_ATLAS: Texture2D = preload("res://assets/art/daily/characters/protagonist_side_walk_v07.png")
+const WALK_ATLAS: Texture2D = preload("res://assets/art/daily/characters/protagonist_side_walk_v09.png")
 const IDLE_TEXTURE: Texture2D = preload("res://assets/art/daily/characters/protagonist_side_idle_v07.png")
 const AMBIENT_SCRIPT: Script = preload("res://scripts/daily_room_ambient.gd")
 
@@ -14,13 +14,18 @@ const MIN_X: float = 555.0
 const MAX_X: float = 1420.0
 const FRAME_SIZE := Vector2(448.0, 640.0)
 const FOOT_Y: float = 610.0
+const BASE_OFFSET_Y: float = -(FOOT_Y - FRAME_SIZE.y * 0.5)
 const WALK_SPEED: float = 140.0
 const ACCELERATION: float = 310.0
+const STRIDE_LENGTH: float = 140.0
 
 var character: AnimatedSprite2D
 var ambient: Node2D
 var curtain_left: Node2D
 var curtain_right: Node2D
+var hanging_lamp: Node2D
+var window_leaves: Node2D
+var room_plant: Node2D
 var status_label: Label
 var action_panel: PanelContainer
 var action_title: Label
@@ -30,6 +35,7 @@ var elapsed: float = 0.0
 var start_delay: float = 0.85
 var screenshot_saved: bool = false
 var render_demo: bool = false
+var walk_phase: float = 0.0
 
 
 func _ready() -> void:
@@ -47,6 +53,7 @@ func _process(delta: float) -> void:
     ambient.set("character_x", character.position.x)
     if start_delay > 0.0:
         start_delay -= delta
+        _animate_idle()
         return
     _update_walk(delta)
     if render_demo and not screenshot_saved and elapsed >= 3.4:
@@ -81,6 +88,9 @@ func _build_ambient_motion() -> void:
     add_child(ambient)
     curtain_left = _add_swaying_crop("CurtainLeft", Rect2(25.0, 82.0, 92.0, 520.0), Vector2(71.0, 82.0))
     curtain_right = _add_swaying_crop("CurtainRight", Rect2(526.0, 82.0, 112.0, 525.0), Vector2(582.0, 82.0))
+    hanging_lamp = _add_swaying_crop("HangingLamp", Rect2(750.0, 12.0, 150.0, 108.0), Vector2(825.0, 12.0))
+    window_leaves = _add_bottom_swaying_crop("WindowLeaves", Rect2(0.0, 115.0, 158.0, 310.0), Vector2(79.0, 425.0))
+    room_plant = _add_bottom_swaying_crop("RoomPlant", Rect2(1128.0, 410.0, 122.0, 210.0), Vector2(1189.0, 620.0))
 
 
 func _add_swaying_crop(node_name: String, region: Rect2, pivot_position: Vector2) -> Node2D:
@@ -99,12 +109,28 @@ func _add_swaying_crop(node_name: String, region: Rect2, pivot_position: Vector2
     return pivot
 
 
+func _add_bottom_swaying_crop(node_name: String, region: Rect2, pivot_position: Vector2) -> Node2D:
+    var pivot := Node2D.new()
+    pivot.name = node_name
+    pivot.position = pivot_position
+    var atlas := AtlasTexture.new()
+    atlas.atlas = BACKGROUND
+    atlas.region = region
+    var sprite := Sprite2D.new()
+    sprite.texture = atlas
+    sprite.position = Vector2(0.0, -region.size.y * 0.5)
+    sprite.modulate = Color(1.0, 1.0, 1.0, 0.72)
+    pivot.add_child(sprite)
+    add_child(pivot)
+    return pivot
+
+
 func _build_character() -> void:
     var frames := SpriteFrames.new()
     frames.add_animation("walk")
-    frames.set_animation_speed("walk", 8.0)
+    frames.set_animation_speed("walk", 12.0)
     frames.set_animation_loop("walk", true)
-    for index: int in range(8):
+    for index: int in range(12):
         var frame := AtlasTexture.new()
         frame.atlas = WALK_ATLAS
         frame.region = Rect2(float(index % 4) * FRAME_SIZE.x, float(index / 4) * FRAME_SIZE.y, FRAME_SIZE.x, FRAME_SIZE.y)
@@ -118,8 +144,9 @@ func _build_character() -> void:
     character.name = "Protagonist"
     character.sprite_frames = frames
     character.position = Vector2(DOOR_X, GROUND_Y)
-    character.offset = Vector2(0.0, -(FOOT_Y - FRAME_SIZE.y * 0.5))
+    character.offset = Vector2(0.0, BASE_OFFSET_Y)
     character.animation = "idle"
+    character.z_index = 4
     add_child(character)
 
 
@@ -215,6 +242,9 @@ func _panel_style(background_color: Color, border_color: Color, radius: float) -
 func _animate_room() -> void:
     curtain_left.rotation = sin(elapsed * 0.55) * 0.012
     curtain_right.rotation = -sin(elapsed * 0.51 + 0.8) * 0.010
+    hanging_lamp.rotation = sin(elapsed * 0.43 + 0.6) * 0.0045
+    window_leaves.rotation = sin(elapsed * 0.67 + 0.9) * 0.010
+    room_plant.rotation = -sin(elapsed * 0.74 + 1.7) * 0.012
 
 
 func _set_target(value: float, message: String) -> void:
@@ -234,9 +264,12 @@ func _update_walk(delta: float) -> void:
     velocity_x = move_toward(velocity_x, desired_speed, ACCELERATION * delta)
     if absf(distance) <= 1.5 and absf(velocity_x) <= 18.0:
         character.position.x = target_x
+        character.position.y = GROUND_Y
         velocity_x = 0.0
         if character.animation != "idle":
             character.play("idle")
+        _animate_idle()
+        if not action_panel.visible:
             _arrived()
         return
 
@@ -244,9 +277,27 @@ func _update_walk(delta: float) -> void:
     if signf(target_x - character.position.x) != direction:
         character.position.x = target_x
     character.flip_h = velocity_x > 0.0
+    var speed_ratio: float = clampf(absf(velocity_x) / WALK_SPEED, 0.0, 1.0)
+    walk_phase = fmod(walk_phase + absf(velocity_x) * delta / STRIDE_LENGTH * TAU, TAU)
     if character.animation != "walk":
         character.play("walk")
-    character.speed_scale = clampf(absf(velocity_x) / WALK_SPEED, 0.68, 1.0)
+    var normalized_phase: float = walk_phase / TAU
+    character.frame = mini(11, floori(normalized_phase * 12.0))
+    character.frame_progress = fmod(normalized_phase * 12.0, 1.0)
+    var double_step: float = sin(walk_phase * 2.0)
+    var contact: float = pow(maxf(0.0, cos(walk_phase * 2.0)), 8.0)
+    character.position.y = GROUND_Y - absf(sin(walk_phase)) * 3.4 * speed_ratio + contact * 0.9
+    character.rotation = double_step * 0.0048 * speed_ratio
+    character.scale = Vector2(1.0 + contact * 0.003, 1.0 - contact * 0.004)
+    character.offset.x = double_step * 1.3 * speed_ratio
+
+
+func _animate_idle() -> void:
+    var breath: float = sin(elapsed * 1.55)
+    character.position.y = GROUND_Y - breath * 0.65
+    character.rotation = sin(elapsed * 0.68) * 0.0018
+    character.scale = Vector2(1.0 - breath * 0.0012, 1.0 + breath * 0.0022)
+    character.offset = Vector2(0.0, BASE_OFFSET_Y)
 
 
 func _arrived() -> void:
@@ -264,9 +315,12 @@ func _arrived() -> void:
 
 func _replay() -> void:
     character.position.x = DOOR_X
+    character.position.y = GROUND_Y
     character.flip_h = false
     character.play("idle")
+    _animate_idle()
     velocity_x = 0.0
+    walk_phase = 0.0
     start_delay = 0.65
     elapsed = 0.0
     screenshot_saved = false
@@ -276,4 +330,4 @@ func _replay() -> void:
 func _save_demo_screenshot() -> void:
     await RenderingServer.frame_post_draw
     var image: Image = get_viewport().get_texture().get_image()
-    image.save_png(ProjectSettings.globalize_path("res://assets/art/daily/daily_room_godot_preview_v07.png"))
+    image.save_png(ProjectSettings.globalize_path("res://assets/art/daily/daily_room_godot_preview_v09.png"))
