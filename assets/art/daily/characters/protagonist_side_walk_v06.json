@@ -1,0 +1,160 @@
+{
+  "view": "fixed_side",
+  "columns": 4,
+  "rows": 2,
+  "frame_width": 384,
+  "frame_height": 530,
+  "frame_count": 8,
+  "fps": 10,
+  "cycle_duration_seconds": 0.8,
+  "character_height": 470,
+  "foot_anchor": [
+    192,
+    510
+  ],
+  "room_ground_y": 795,
+  "motion": "eight hand-painted walk phases: contact, down, passing and up for both feet",
+  "direction": "left",
+  "right_direction": "horizontal flip",
+  "frame_order": [
+    "left_contact",
+    "left_down",
+    "left_passing",
+    "left_up",
+    "right_contact",
+    "right_down",
+    "right_passing",
+    "right_up"
+  ],
+  "recommended_world_speed_px_per_second": 178,
+  "metrics": [
+    {
+      "index": 0,
+      "source_bbox": [
+        17,
+        84,
+        320,
+        652
+      ],
+      "normalized_bbox": [
+        72,
+        48,
+        319,
+        511
+      ],
+      "baseline": 510
+    },
+    {
+      "index": 1,
+      "source_bbox": [
+        3,
+        94,
+        228,
+        654
+      ],
+      "normalized_bbox": [
+        102,
+        54,
+        288,
+        511
+      ],
+      "baseline": 510
+    },
+    {
+      "index": 2,
+      "source_bbox": [
+        8,
+        80,
+        232,
+        655
+      ],
+      "normalized_bbox": [
+        105,
+        42,
+        290,
+        511
+      ],
+      "baseline": 510
+    },
+    {
+      "index": 3,
+      "source_bbox": [
+        9,
+        72,
+        232,
+        655
+      ],
+      "normalized_bbox": [
+        91,
+        36,
+        276,
+        511
+      ],
+      "baseline": 510
+    },
+    {
+      "index": 4,
+      "source_bbox": [
+        0,
+        83,
+        291,
+        651
+      ],
+      "normalized_bbox": [
+        78,
+        47,
+        313,
+        511
+      ],
+      "baseline": 510
+    },
+    {
+      "index": 5,
+      "source_bbox": [
+        2,
+        93,
+        264,
+        655
+      ],
+      "normalized_bbox": [
+        98,
+        53,
+        314,
+        511
+      ],
+      "baseline": 510
+    },
+    {
+      "index": 6,
+      "source_bbox": [
+        12,
+        82,
+        206,
+        655
+      ],
+      "normalized_bbox": [
+        118,
+        44,
+        280,
+        511
+      ],
+      "baseline": 510
+    },
+    {
+      "index": 7,
+      "source_bbox": [
+        21,
+        73,
+        278,
+        655
+      ],
+      "normalized_bbox": [
+        92,
+        36,
+        304,
+        511
+      ],
+      "baseline": 510
+    }
+  ]
+}

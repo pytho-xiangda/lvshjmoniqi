@@ -26,10 +26,10 @@ const server=http.createServer((req,res)=>{
     const page=await browser.newPage({viewport:{width:1440,height:1000}});page.on('pageerror',error=>errors.push(String(error)));
     await page.goto(base+'/docs/design/art/daily_room_side_preview.html?export');await page.evaluate(()=>window.roomReady);
     for(const [name,seconds] of [['door',0],['walking',3],['desk',6]]){await page.evaluate(time=>window.sideRoomDemo.drawAt(time),seconds);fs.writeFileSync(path.join(work,name+'.png'),png(await page.evaluate(()=>window.sideRoomDemo.snapshot())))}
-    await page.evaluate(()=>window.sideRoomDemo.drawAt(3));fs.writeFileSync(path.join(art,'daily_room_side_character_preview_v04.png'),png(await page.evaluate(()=>window.sideRoomDemo.snapshot())));
+    await page.evaluate(()=>window.sideRoomDemo.drawAt(2.5));fs.writeFileSync(path.join(art,'daily_room_side_character_preview_v06.png'),png(await page.evaluate(()=>window.sideRoomDemo.snapshot())));
     if(args.includes('--video')){
       const frames=144,fps=24;for(let index=0;index<frames;index++){await page.evaluate(time=>window.sideRoomDemo.drawAt(time),index/fps);fs.writeFileSync(path.join(work,`frame_${String(index).padStart(4,'0')}.png`),png(await page.evaluate(()=>window.sideRoomDemo.snapshot())))}
-      const out=path.join(root,'assets','videos','daily_room_side_walk_v04.mp4');fs.mkdirSync(path.dirname(out),{recursive:true});
+      const out=path.join(root,'assets','videos','daily_room_side_walk_v06.mp4');fs.mkdirSync(path.dirname(out),{recursive:true});
       const result=spawnSync(ffmpeg,['-hide_banner','-loglevel','error','-y','-framerate',String(fps),'-i',path.join(work,'frame_%04d.png'),'-vf','scale=1280:720:flags=lanczos','-c:v','libx264','-crf','19','-pix_fmt','yuv420p','-movflags','+faststart','-an',out],{windowsHide:true,encoding:'utf8'});if(result.error||result.status!==0)throw Error(result.error||result.stderr);
       console.log('Video exported: '+path.relative(root,out));
     }
@@ -39,6 +39,6 @@ const server=http.createServer((req,res)=>{
     await page.click('#close');await page.click('#door');await page.waitForSelector('#panel:not([hidden])',{timeout:9000});if(await page.locator('#panel-title').innerText()!=='准备去哪里？')throw Error('Door interaction failed');
     await page.keyboard.press('Escape');if(!await page.locator('#panel').evaluate(value=>value.hidden))throw Error('Escape failed');
     await page.setViewportSize({width:390,height:844});if(!await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth))throw Error('Mobile overflow');if(errors.length)throw Error(errors.join('\n'));
-    const report={projection:'fixed_side',background:'v04',ground_y:795,character_height:470,door_ratio:.799,walk_frames:12,walk_fps:12,video_fps:24,ambient_motion:true,computer_menu:true,door_menu:true,repeated_click:true,mobile_overflow:false,page_errors:errors};fs.writeFileSync(path.join(work,'validation.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
+    const report={projection:'fixed_side',background:'v04',ground_y:795,character_height:470,door_ratio:.799,walk_frames:8,walk_fps:10,walk_speed:178,video_fps:24,walk_phases:['contact','down','passing','up'],heel_to_toe:true,ambient_motion:true,computer_menu:true,door_menu:true,repeated_click:true,mobile_overflow:false,page_errors:errors};fs.writeFileSync(path.join(work,'validation.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
   }finally{await browser.close();server.close()}
 })().catch(error=>{console.error(error);server.close();process.exitCode=1});

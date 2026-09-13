@@ -6,7 +6,8 @@ const status=document.getElementById('status');
 const panel=document.getElementById('panel');
 const image=src=>new Promise((resolve,reject)=>{const value=new Image();value.onload=()=>resolve(value);value.onerror=reject;value.src=src});
 const W=1672,H=941,GROUND_Y=795,DOOR_X=1360,DESK_X=650;
-const FRAME_W=384,FRAME_H=530,CHARACTER_H=470,FOOT_Y=510,WALK_FPS=12,WALK_FRAME_COUNT=12;
+const FRAME_W=384,FRAME_H=530,CHARACTER_H=470,FOOT_Y=510,WALK_FPS=10,WALK_FRAME_COUNT=8;
+const WALK_SPEED=178;
 let background,walkFrames=[],walkAtlas,idleFrame,playerX=DOOR_X,facingLeft=true,motion=null;
 const exportMode=new URLSearchParams(location.search).has('export');
 
@@ -60,21 +61,21 @@ function drawAmbient(seconds){
 
 function draw(x=playerX,frame=0,moving=false,left=facingLeft,seconds=0){
   ctx.clearRect(0,0,W,H);ctx.drawImage(background,0,0,W,H);drawAmbient(seconds);
-  const bob=moving?[0,1,2,1,0,-1,0,1,2,1,0,-1][frame%WALK_FRAME_COUNT]:0;
+  const bob=0;
   ctx.save();ctx.translate(x,GROUND_Y-bob);ctx.fillStyle='#241b1829';ctx.filter='blur(4px)';ctx.beginPath();ctx.ellipse(0,bob-3,43,9,0,0,Math.PI*2);ctx.fill();ctx.filter='none';
   ctx.scale(left?1:-1,1);const sprite=moving?walkFrames[frame]:idleFrame;ctx.drawImage(sprite,-FRAME_W/2,-FOOT_Y);ctx.restore();
 }
 
 function demoAt(seconds){
-  const progress=Math.max(0,Math.min(1,(seconds-.5)/5));
-  const moving=seconds>=.5&&seconds<5.5;const x=DOOR_X+(DESK_X-DOOR_X)*progress;
+  const progress=Math.max(0,Math.min(1,(seconds-.5)/4));
+  const moving=seconds>=.5&&seconds<4.5;const x=DOOR_X+(DESK_X-DOOR_X)*progress;
   draw(x,moving?Math.floor((seconds-.5)*WALK_FPS)%WALK_FRAME_COUNT:0,moving,true,seconds);return{x,progress,moving};
 }
 
 function moveTo(targetX,open=null){
   panel.hidden=true;targetX=Math.max(560,Math.min(1420,targetX));
   if(Math.abs(playerX-targetX)<1){if(open)showPanel(open);return}
-  facingLeft=targetX<playerX;motion={from:playerX,to:targetX,start:performance.now(),duration:Math.max(350,Math.abs(targetX-playerX)/140*1000),open};status.textContent=facingLeft?'向左行走…':'向右行走…';
+  facingLeft=targetX<playerX;motion={from:playerX,to:targetX,start:performance.now(),duration:Math.max(350,Math.abs(targetX-playerX)/WALK_SPEED*1000),open};status.textContent=facingLeft?'向左行走…':'向右行走…';
 }
 
 function showPanel(kind){
@@ -90,7 +91,7 @@ function showPanel(kind){
 
 function animate(now){
   if(!exportMode){
-    if(motion?.demo){const seconds=(now-motion.start)/1000;const state=demoAt(seconds);playerX=state.x;facingLeft=true;if(seconds>=6){playerX=DESK_X;motion=null;draw(playerX,0,false,facingLeft,now/1000);status.textContent='已到电脑桌前。'}}
+    if(motion?.demo){const seconds=(now-motion.start)/1000;const state=demoAt(seconds);playerX=state.x;facingLeft=true;if(seconds>=5){playerX=DESK_X;motion=null;draw(playerX,0,false,facingLeft,now/1000);status.textContent='已到电脑桌前。'}}
     else if(motion){const p=Math.min(1,(now-motion.start)/motion.duration);playerX=motion.from+(motion.to-motion.from)*p;draw(playerX,Math.floor((now-motion.start)/1000*WALK_FPS)%WALK_FRAME_COUNT,p<1,facingLeft,now/1000);if(p===1){const open=motion.open;motion=null;draw(playerX,0,false,facingLeft,now/1000);status.textContent='已到达。';if(open)showPanel(open)}}
     else draw(playerX,0,false,facingLeft,now/1000);
   }
@@ -105,9 +106,9 @@ window.addEventListener('keydown',event=>{if(event.key==='Escape')panel.hidden=t
 canvas.addEventListener('click',event=>{const rect=canvas.getBoundingClientRect(),x=(event.clientX-rect.left)/rect.width*W,y=(event.clientY-rect.top)/rect.height*H;if(y>705)moveTo(x)});
 
 const base='../../../assets/art/daily/characters/';
-window.roomReady=Promise.all([image('../../../assets/art/daily/daily_room_side_v04.png'),image(base+'protagonist_side_walk_v04.png'),image(base+'protagonist_side_idle_v04.png')]).then(values=>{
+window.roomReady=Promise.all([image('../../../assets/art/daily/daily_room_side_v04.png'),image(base+'protagonist_side_walk_v06.png'),image(base+'protagonist_side_idle_v06.png')]).then(values=>{
   background=values[0];
-  walkAtlas=values[1];for(let index=0;index<WALK_FRAME_COUNT;index++){const frame=document.createElement('canvas');frame.width=FRAME_W;frame.height=FRAME_H;frame.getContext('2d').drawImage(walkAtlas,(index%6)*FRAME_W,Math.floor(index/6)*FRAME_H,FRAME_W,FRAME_H,0,0,FRAME_W,FRAME_H);walkFrames.push(frame)}idleFrame=values[2];
+  walkAtlas=values[1];for(let index=0;index<WALK_FRAME_COUNT;index++){const frame=document.createElement('canvas');frame.width=FRAME_W;frame.height=FRAME_H;frame.getContext('2d').drawImage(walkAtlas,(index%4)*FRAME_W,Math.floor(index/4)*FRAME_H,FRAME_W,FRAME_H,0,0,FRAME_W,FRAME_H);walkFrames.push(frame)}idleFrame=values[2];
   draw();status.textContent='点击地板移动，或选择办公、外出。';
   window.sideRoomDemo={drawAt:demoAt,walkAtlas:()=>walkAtlas.toDataURL('image/png'),idle:()=>idleFrame.toDataURL('image/png'),snapshot:()=>canvas.toDataURL('image/png'),position:()=>({x:playerX,y:GROUND_Y}),moveTo};
   requestAnimationFrame(animate);return true;
