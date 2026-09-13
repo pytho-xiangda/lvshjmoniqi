@@ -6,9 +6,10 @@ const MOTION_SHADER: Shader = preload("res://shaders/cinematic_desk_motion.gdsha
 const AMBIENT_SCRIPT: Script = preload("res://scripts/cinematic_desk_ambient.gd")
 const VIEW_SIZE := Vector2(1672.0, 941.0)
 const CAMERA_CENTER := Vector2(836.0, 470.5)
+const ACTIVE_MOTION_STRENGTH: float = 1.25
 
 var elapsed: float = 0.0
-var motion_strength: float = 1.0
+var motion_strength: float = ACTIVE_MOTION_STRENGTH
 var motion_enabled: bool = true
 var screenshot_saved: bool = false
 var render_demo: bool = false
@@ -26,8 +27,8 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
     elapsed += delta
-    var target_strength: float = 1.0 if motion_enabled else 0.0
-    motion_strength = move_toward(motion_strength, target_strength, delta * 0.65)
+    var target_strength: float = ACTIVE_MOTION_STRENGTH if motion_enabled else 0.0
+    motion_strength = move_toward(motion_strength, target_strength, delta * 0.80)
     background_material.set_shader_parameter("motion_strength", motion_strength)
     ambient.call("set_intensity", motion_strength)
     _animate_camera()

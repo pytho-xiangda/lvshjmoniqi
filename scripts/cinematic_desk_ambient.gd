@@ -95,6 +95,14 @@ func _draw() -> void:
         -0.10
     )
 
+    var paper_lift: float = 0.5 + sin(elapsed * 0.82 + 0.5) * 0.5
+    _draw_ellipse(
+        Vector2(1126.0, 464.0 + paper_lift * 1.3),
+        Vector2(54.0 + paper_lift * 2.0, 5.0),
+        Color(0.16, 0.10, 0.06, (0.012 + paper_lift * 0.018) * intensity),
+        -0.02
+    )
+
     var floor_glow: float = 0.5 + sin(elapsed * 0.24 + 0.8) * 0.5
     _draw_ellipse(
         Vector2(690.0 + sin(elapsed * 0.18) * 18.0, 758.0),
