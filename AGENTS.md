@@ -16,7 +16,7 @@
 - 庭审战斗 BGM：`docs/design/audio/court_bgm_16bits.md`；五首音频在 `assets/audio/bgm/court_16bits/`，试听页为 `docs/design/audio/court_bgm_preview.html`。
 - 庭审舒缓版《纸页间的沉思》：`assets/audio/bgm/court_soft/06_quiet_deliberation.wav`；配方为 `docs/design/audio/court_bgm_soft.json`。
 - 舒缓钢琴试作《草地上的云》：`docs/design/audio/meadow_piano.md`；WAV、MP3、MIDI 及乐谱在 `assets/audio/bgm/meadow_piano/`。
-- Godot 工程入口为 `project.godot`，当前主场景是 `scenes/daily_room_demo.tscn`；使用本机 Godot 4.7.1 进行导入与运行验证。
+- Godot 工程入口为 `project.godot`，当前主场景是 `scenes/cinematic_desk_demo.tscn`；使用本机 Godot 4.7.1 进行导入与运行验证。
 - 主要版本以 `project.godot` 中 `config/features` 声明的 Godot 版本为准；如果与本文冲突，以 `project.godot` 为准并更新本文。
 
 ## 项目结构

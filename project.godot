@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="律师模拟器"
-run/main_scene="res://scenes/daily_room_demo.tscn"
+run/main_scene="res://scenes/cinematic_desk_demo.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [display]
