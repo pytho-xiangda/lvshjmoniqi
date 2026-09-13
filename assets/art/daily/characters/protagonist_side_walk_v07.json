@@ -1,0 +1,31 @@
+{
+  "view": "fixed_side",
+  "columns": 4,
+  "rows": 2,
+  "frame_width": 448,
+  "frame_height": 640,
+  "frame_count": 8,
+  "fps": 8,
+  "cycle_duration_seconds": 1.0,
+  "character_height": 540,
+  "foot_anchor": [
+    224,
+    610
+  ],
+  "room_ground_y": 795,
+  "door_ratio": 0.918,
+  "motion": "relaxed small-stride daily walk with low foot clearance and restrained upper-body motion",
+  "direction": "left",
+  "right_direction": "horizontal flip",
+  "recommended_world_speed_px_per_second": 140,
+  "frame_order": [
+    "left_contact",
+    "left_settle",
+    "left_pass",
+    "left_release",
+    "right_contact",
+    "right_settle",
+    "right_pass",
+    "right_release"
+  ]
+}
