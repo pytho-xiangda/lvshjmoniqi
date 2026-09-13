@@ -6,7 +6,7 @@ const status=document.getElementById('status');
 const panel=document.getElementById('panel');
 const image=src=>new Promise((resolve,reject)=>{const value=new Image();value.onload=()=>resolve(value);value.onerror=reject;value.src=src});
 const W=1672,H=941,GROUND_Y=795,DOOR_X=1360,DESK_X=650;
-const FRAME_W=384,FRAME_H=530,CHARACTER_H=470,FOOT_Y=510,WALK_FPS=7;
+const FRAME_W=384,FRAME_H=530,CHARACTER_H=470,FOOT_Y=510,WALK_FPS=12,WALK_FRAME_COUNT=12;
 let background,walkFrames=[],walkAtlas,idleFrame,playerX=DOOR_X,facingLeft=true,motion=null;
 const exportMode=new URLSearchParams(location.search).has('export');
 
@@ -49,16 +49,26 @@ function buildAtlas(sources){
   return walkAtlas;
 }
 
-function draw(x=playerX,frame=0,moving=false,left=facingLeft){
-  ctx.clearRect(0,0,W,H);ctx.drawImage(background,0,0,W,H);
-  ctx.save();ctx.translate(x,GROUND_Y);ctx.fillStyle='#241b1830';ctx.filter='blur(4px)';ctx.beginPath();ctx.ellipse(0,-3,43,9,0,0,Math.PI*2);ctx.fill();ctx.filter='none';
+function drawAmbient(seconds){
+  ctx.save();ctx.globalCompositeOperation='screen';ctx.fillStyle='#f6d9a512';
+  const drift=Math.sin(seconds*.55)*9;
+  for(const [x,y,rx,ry] of [[165,778,58,13],[300,825,74,15],[455,765,52,11],[565,838,67,13]]){ctx.beginPath();ctx.ellipse(x+drift,y,rx,ry,-.18,0,Math.PI*2);ctx.fill()}
+  ctx.globalCompositeOperation='source-over';
+  for(let index=0;index<14;index++){const x=125+(index*79)%500+Math.sin(seconds*.42+index)*7,y=125+(index*113)%500+Math.cos(seconds*.31+index)*5;ctx.fillStyle=`rgba(255,244,211,${.06+(index%4)*.025})`;ctx.beginPath();ctx.arc(x,y,1+(index%3)*.45,0,Math.PI*2);ctx.fill()}
+  ctx.restore();
+}
+
+function draw(x=playerX,frame=0,moving=false,left=facingLeft,seconds=0){
+  ctx.clearRect(0,0,W,H);ctx.drawImage(background,0,0,W,H);drawAmbient(seconds);
+  const bob=moving?[0,1,2,1,0,-1,0,1,2,1,0,-1][frame%WALK_FRAME_COUNT]:0;
+  ctx.save();ctx.translate(x,GROUND_Y-bob);ctx.fillStyle='#241b1829';ctx.filter='blur(4px)';ctx.beginPath();ctx.ellipse(0,bob-3,43,9,0,0,Math.PI*2);ctx.fill();ctx.filter='none';
   ctx.scale(left?1:-1,1);const sprite=moving?walkFrames[frame]:idleFrame;ctx.drawImage(sprite,-FRAME_W/2,-FOOT_Y);ctx.restore();
 }
 
 function demoAt(seconds){
   const progress=Math.max(0,Math.min(1,(seconds-.5)/5));
   const moving=seconds>=.5&&seconds<5.5;const x=DOOR_X+(DESK_X-DOOR_X)*progress;
-  draw(x,moving?Math.floor((seconds-.5)*WALK_FPS)%4:0,moving,true);return{x,progress,moving};
+  draw(x,moving?Math.floor((seconds-.5)*WALK_FPS)%WALK_FRAME_COUNT:0,moving,true,seconds);return{x,progress,moving};
 }
 
 function moveTo(targetX,open=null){
@@ -80,9 +90,9 @@ function showPanel(kind){
 
 function animate(now){
   if(!exportMode){
-    if(motion?.demo){const seconds=(now-motion.start)/1000;const state=demoAt(seconds);playerX=state.x;facingLeft=true;if(seconds>=6){playerX=DESK_X;motion=null;draw();status.textContent='已到电脑桌前。'}}
-    else if(motion){const p=Math.min(1,(now-motion.start)/motion.duration);playerX=motion.from+(motion.to-motion.from)*p;draw(playerX,Math.floor((now-motion.start)/1000*WALK_FPS)%4,p<1,facingLeft);if(p===1){const open=motion.open;motion=null;draw();status.textContent='已到达。';if(open)showPanel(open)}}
-    else draw();
+    if(motion?.demo){const seconds=(now-motion.start)/1000;const state=demoAt(seconds);playerX=state.x;facingLeft=true;if(seconds>=6){playerX=DESK_X;motion=null;draw(playerX,0,false,facingLeft,now/1000);status.textContent='已到电脑桌前。'}}
+    else if(motion){const p=Math.min(1,(now-motion.start)/motion.duration);playerX=motion.from+(motion.to-motion.from)*p;draw(playerX,Math.floor((now-motion.start)/1000*WALK_FPS)%WALK_FRAME_COUNT,p<1,facingLeft,now/1000);if(p===1){const open=motion.open;motion=null;draw(playerX,0,false,facingLeft,now/1000);status.textContent='已到达。';if(open)showPanel(open)}}
+    else draw(playerX,0,false,facingLeft,now/1000);
   }
   requestAnimationFrame(animate);
 }
@@ -94,13 +104,10 @@ document.getElementById('close').onclick=()=>{panel.hidden=true};
 window.addEventListener('keydown',event=>{if(event.key==='Escape')panel.hidden=true});
 canvas.addEventListener('click',event=>{const rect=canvas.getBoundingClientRect(),x=(event.clientX-rect.left)/rect.width*W,y=(event.clientY-rect.top)/rect.height*H;if(y>705)moveTo(x)});
 
-const prepare=new URLSearchParams(location.search).has('prepare');
 const base='../../../assets/art/daily/characters/';
-const sourcePaths=['source_v03/walk_contact_left.png','source_v03/walk_pass_right.png','source_v03/walk_contact_right.png','source_v03/walk_pass_left.png'];
-window.roomReady=(prepare?Promise.all([image('../../../assets/art/daily/daily_room_side_v03.png'),...sourcePaths.map(path=>image(base+path)),image(base+'source_v03/idle_left.png')]):Promise.all([image('../../../assets/art/daily/daily_room_side_v03.png'),image(base+'protagonist_side_walk_v03.png'),image(base+'protagonist_side_idle_v03.png')])).then(values=>{
+window.roomReady=Promise.all([image('../../../assets/art/daily/daily_room_side_v04.png'),image(base+'protagonist_side_walk_v04.png'),image(base+'protagonist_side_idle_v04.png')]).then(values=>{
   background=values[0];
-  if(prepare){buildAtlas(values.slice(1,5));idleFrame=normalize(values[5])}
-  else{walkAtlas=values[1];for(let index=0;index<4;index++){const frame=document.createElement('canvas');frame.width=FRAME_W;frame.height=FRAME_H;frame.getContext('2d').drawImage(walkAtlas,index*FRAME_W,0,FRAME_W,FRAME_H,0,0,FRAME_W,FRAME_H);walkFrames.push(frame)}idleFrame=values[2]}
+  walkAtlas=values[1];for(let index=0;index<WALK_FRAME_COUNT;index++){const frame=document.createElement('canvas');frame.width=FRAME_W;frame.height=FRAME_H;frame.getContext('2d').drawImage(walkAtlas,(index%6)*FRAME_W,Math.floor(index/6)*FRAME_H,FRAME_W,FRAME_H,0,0,FRAME_W,FRAME_H);walkFrames.push(frame)}idleFrame=values[2];
   draw();status.textContent='点击地板移动，或选择办公、外出。';
   window.sideRoomDemo={drawAt:demoAt,walkAtlas:()=>walkAtlas.toDataURL('image/png'),idle:()=>idleFrame.toDataURL('image/png'),snapshot:()=>canvas.toDataURL('image/png'),position:()=>({x:playerX,y:GROUND_Y}),moveTo};
   requestAnimationFrame(animate);return true;

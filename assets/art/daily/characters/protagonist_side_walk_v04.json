@@ -1,0 +1,129 @@
+{
+  "view": "fixed_side",
+  "columns": 6,
+  "rows": 2,
+  "frame_width": 384,
+  "frame_height": 530,
+  "frame_count": 12,
+  "fps": 12,
+  "character_height": 470,
+  "foot_anchor": [
+    192,
+    510
+  ],
+  "room_ground_y": 795,
+  "direction": "left",
+  "right_direction": "horizontal flip",
+  "interpolation": "FFmpeg bidirectional motion-compensated interpolation from four painted key poses",
+  "color_match": "reduced saturation and contrast with a restrained walnut ambient tint",
+  "frames": [
+    {
+      "index": 0,
+      "region": [
+        0,
+        0,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 1,
+      "region": [
+        384,
+        0,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 2,
+      "region": [
+        768,
+        0,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 3,
+      "region": [
+        1152,
+        0,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 4,
+      "region": [
+        1536,
+        0,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 5,
+      "region": [
+        1920,
+        0,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 6,
+      "region": [
+        0,
+        530,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 7,
+      "region": [
+        384,
+        530,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 8,
+      "region": [
+        768,
+        530,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 9,
+      "region": [
+        1152,
+        530,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 10,
+      "region": [
+        1536,
+        530,
+        384,
+        530
+      ]
+    },
+    {
+      "index": 11,
+      "region": [
+        1920,
+        530,
+        384,
+        530
+      ]
+    }
+  ]
+}

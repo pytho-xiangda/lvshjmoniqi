@@ -1,5 +1,7 @@
 # 横版日常房间 v03 · 当前游戏场景规范
 
+> v03 已由 12 帧、24 fps 场景动态的 v04 取代；当前规范见 `daily_room_side_v04.md`。
+
 当前背景：`assets/art/daily/daily_room_side_v03.png`，1672×941，RGB PNG。v01/v02 是三分之四透视草案；v03 改为固定正侧视，作为当前接入版本。
 
 ## 为什么重做
