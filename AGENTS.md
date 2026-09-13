@@ -11,7 +11,7 @@
 - 美术基准：`assets/art/main_menu_concept.png`；统一美术、人物立绘与 UI 执行规范：`docs/design/art/art_direction.md`；生成提示词：`docs/design/art/generation_prompts.md`。后续美术默认沿用此风格。
 - 庭审主要战斗场景与非写实卡牌风格探索：`docs/design/art/battle_cards.md`；对应图片放在 `assets/art/battle/` 与 `assets/art/cards/`。
 - 已确认庭审方向为“超现实纸境＋纸境卡牌”；人物与动效规范：`docs/design/art/paper_battle_motion.md`；动态预览：`docs/design/art/paper_battle_preview.html`。
-- 当前日常房间已接入 Godot：主场景 `scenes/daily_room_demo.tscn`；背景 `assets/art/daily/daily_room_side_v04.png`；十二张完整人物绘制、连续重心和全场景错相律动规范 `docs/design/art/daily_room_side_v09.md`；Godot 实录 `assets/videos/daily_room_godot_demo_v09.mp4`。v01–v08 为历史草案。
+- 当前日常房间已接入 Godot：主场景 `scenes/daily_room_demo.tscn`；背景 `assets/art/daily/daily_room_side_v04.png`；Tween 位移、真实速度步频、状态交叉淡化、坐下与相机演出规范 `docs/design/art/daily_room_side_v10.md`；Godot 实录 `assets/videos/daily_room_godot_demo_v10.mp4`。v01–v09 为历史草案。
 - 庭审对手不限于律师，角色特征可外化为非写实躯体与周期招式；阴影法官与勾兑型「宴席客」规范：`docs/design/art/boss_banquet.md`。
 - 庭审战斗 BGM：`docs/design/audio/court_bgm_16bits.md`；五首音频在 `assets/audio/bgm/court_16bits/`，试听页为 `docs/design/audio/court_bgm_preview.html`。
 - 庭审舒缓版《纸页间的沉思》：`assets/audio/bgm/court_soft/06_quiet_deliberation.wav`；配方为 `docs/design/audio/court_bgm_soft.json`。

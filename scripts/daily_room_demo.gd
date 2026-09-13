@@ -2,25 +2,23 @@ extends Node2D
 
 
 const BACKGROUND: Texture2D = preload("res://assets/art/daily/daily_room_side_v04.png")
-const WALK_ATLAS: Texture2D = preload("res://assets/art/daily/characters/protagonist_side_walk_v09.png")
-const IDLE_TEXTURE: Texture2D = preload("res://assets/art/daily/characters/protagonist_side_idle_v07.png")
 const AMBIENT_SCRIPT: Script = preload("res://scripts/daily_room_ambient.gd")
+const CHARACTER_SCRIPT: Script = preload("res://scripts/daily_room_character.gd")
 
 const VIEW_SIZE := Vector2(1672.0, 941.0)
 const GROUND_Y: float = 795.0
 const DOOR_X: float = 1360.0
-const DESK_X: float = 650.0
-const MIN_X: float = 555.0
+const WALK_STOP_X: float = 410.0
+const SEAT_X: float = 320.0
+const MIN_X: float = 360.0
 const MAX_X: float = 1420.0
-const FRAME_SIZE := Vector2(448.0, 640.0)
-const FOOT_Y: float = 610.0
-const BASE_OFFSET_Y: float = -(FOOT_Y - FRAME_SIZE.y * 0.5)
-const WALK_SPEED: float = 140.0
-const ACCELERATION: float = 310.0
-const STRIDE_LENGTH: float = 140.0
+const CAMERA_HOME := Vector2(836.0, 470.0)
+const CAMERA_WALK := Vector2(725.0, 470.0)
+const CAMERA_DESK := Vector2(470.0, 500.0)
 
-var character: AnimatedSprite2D
+var character: Node2D
 var ambient: Node2D
+var camera: Camera2D
 var curtain_left: Node2D
 var curtain_right: Node2D
 var hanging_lamp: Node2D
@@ -29,13 +27,11 @@ var room_plant: Node2D
 var status_label: Label
 var action_panel: PanelContainer
 var action_title: Label
-var velocity_x: float = 0.0
-var target_x: float = DESK_X
 var elapsed: float = 0.0
-var start_delay: float = 0.85
 var screenshot_saved: bool = false
 var render_demo: bool = false
-var walk_phase: float = 0.0
+var sequence_running: bool = false
+var fade: ColorRect
 
 
 func _ready() -> void:
@@ -43,35 +39,31 @@ func _ready() -> void:
     _build_room()
     _build_ambient_motion()
     _build_character()
+    _build_camera()
     _build_interface()
-    _set_target(DESK_X, "轻松走向电脑桌……")
+    call_deferred("_play_desk_sequence", true)
 
 
 func _process(delta: float) -> void:
     elapsed += delta
     _animate_room()
     ambient.set("character_x", character.position.x)
-    if start_delay > 0.0:
-        start_delay -= delta
-        _animate_idle()
-        return
-    _update_walk(delta)
-    if render_demo and not screenshot_saved and elapsed >= 3.4:
+    if render_demo and not screenshot_saved and elapsed >= 10.8:
         screenshot_saved = true
         call_deferred("_save_demo_screenshot")
-    if render_demo and elapsed >= 7.4:
+    if render_demo and elapsed >= 12.4:
         get_tree().quit()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-    if event is InputEventKey and event.pressed:
+    if event is InputEventKey and event.pressed and not event.echo:
         if event.keycode == KEY_SPACE:
-            _replay()
+            call_deferred("_play_desk_sequence", true)
         elif event.keycode == KEY_ESCAPE:
             get_tree().quit()
     elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-        if event.position.y > 700.0:
-            _set_target(clampf(event.position.x, MIN_X, MAX_X), "走过去看看……")
+        if event.position.y > 700.0 and not sequence_running:
+            call_deferred("_walk_to_free_point", clampf(event.position.x, MIN_X, MAX_X))
 
 
 func _build_room() -> void:
@@ -126,28 +118,23 @@ func _add_bottom_swaying_crop(node_name: String, region: Rect2, pivot_position: 
 
 
 func _build_character() -> void:
-    var frames := SpriteFrames.new()
-    frames.add_animation("walk")
-    frames.set_animation_speed("walk", 12.0)
-    frames.set_animation_loop("walk", true)
-    for index: int in range(12):
-        var frame := AtlasTexture.new()
-        frame.atlas = WALK_ATLAS
-        frame.region = Rect2(float(index % 4) * FRAME_SIZE.x, float(index / 4) * FRAME_SIZE.y, FRAME_SIZE.x, FRAME_SIZE.y)
-        frames.add_frame("walk", frame)
-    frames.add_animation("idle")
-    frames.set_animation_speed("idle", 1.0)
-    frames.set_animation_loop("idle", true)
-    frames.add_frame("idle", IDLE_TEXTURE)
-
-    character = AnimatedSprite2D.new()
+    character = CHARACTER_SCRIPT.new()
     character.name = "Protagonist"
-    character.sprite_frames = frames
     character.position = Vector2(DOOR_X, GROUND_Y)
-    character.offset = Vector2(0.0, BASE_OFFSET_Y)
-    character.animation = "idle"
     character.z_index = 4
     add_child(character)
+    character.connect("footstep", _on_footstep)
+
+
+func _build_camera() -> void:
+    camera = Camera2D.new()
+    camera.name = "PerformanceCamera"
+    camera.position = CAMERA_HOME
+    camera.zoom = Vector2(1.035, 1.035)
+    camera.position_smoothing_enabled = true
+    camera.position_smoothing_speed = 4.2
+    camera.enabled = true
+    add_child(camera)
 
 
 func _build_interface() -> void:
@@ -168,7 +155,7 @@ func _build_interface() -> void:
     header_box.add_theme_constant_override("separation", 2)
     header.add_child(header_box)
     var kicker := Label.new()
-    kicker.text = "律师模拟器 · 日常房间 Godot 演示"
+    kicker.text = "律师模拟器 · 日常房间"
     kicker.add_theme_font_size_override("font_size", 18)
     kicker.add_theme_color_override("font_color", Color("d8bd8e"))
     header_box.add_child(kicker)
@@ -182,12 +169,12 @@ func _build_interface() -> void:
     controls.position = Vector2(1120.0, 38.0)
     controls.add_theme_constant_override("separation", 12)
     root.add_child(controls)
-    controls.add_child(_make_button("去电脑桌", _set_target.bind(DESK_X, "轻松走向电脑桌……")))
-    controls.add_child(_make_button("去门口", _set_target.bind(DOOR_X, "走向门口……")))
+    controls.add_child(_make_button("去电脑桌", _request_desk))
+    controls.add_child(_make_button("去门口", _request_door))
 
     var hint := Label.new()
     hint.position = Vector2(38.0, 882.0)
-    hint.text = "点击地板移动   Space 重新演示   Esc 退出"
+    hint.text = "点击地板移动   Space 重播完整演出   Esc 退出"
     hint.add_theme_font_size_override("font_size", 20)
     hint.add_theme_color_override("font_color", Color(0.20, 0.16, 0.12, 0.82))
     root.add_child(hint)
@@ -211,6 +198,13 @@ func _build_interface() -> void:
     action_text.add_theme_font_size_override("font_size", 19)
     action_text.add_theme_color_override("font_color", Color("665342"))
     action_box.add_child(action_text)
+
+    fade = ColorRect.new()
+    fade.name = "Fade"
+    fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    fade.color = Color(0.055, 0.045, 0.035, 1.0)
+    root.add_child(fade)
 
 
 func _make_button(text: String, callback: Callable) -> Button:
@@ -247,87 +241,98 @@ func _animate_room() -> void:
     room_plant.rotation = -sin(elapsed * 0.74 + 1.7) * 0.012
 
 
-func _set_target(value: float, message: String) -> void:
-    target_x = clampf(value, MIN_X, MAX_X)
-    action_panel.visible = false
-    if status_label != null:
-        status_label.text = message
-
-
-func _update_walk(delta: float) -> void:
-    var distance: float = target_x - character.position.x
-    var direction: float = signf(distance)
-    var braking_distance: float = velocity_x * velocity_x / (2.0 * ACCELERATION)
-    var desired_speed: float = direction * WALK_SPEED
-    if absf(distance) <= braking_distance + 10.0:
-        desired_speed = direction * minf(WALK_SPEED, sqrt(maxf(0.0, 2.0 * ACCELERATION * absf(distance))))
-    velocity_x = move_toward(velocity_x, desired_speed, ACCELERATION * delta)
-    if absf(distance) <= 1.5 and absf(velocity_x) <= 18.0:
-        character.position.x = target_x
-        character.position.y = GROUND_Y
-        velocity_x = 0.0
-        if character.animation != "idle":
-            character.play("idle")
-        _animate_idle()
-        if not action_panel.visible:
-            _arrived()
+func _play_desk_sequence(reset_first: bool) -> void:
+    if sequence_running:
         return
+    sequence_running = true
+    action_panel.visible = false
+    if reset_first:
+        await _fade_to(1.0, 0.28)
+        character.call("reset_at", Vector2(DOOR_X, GROUND_Y))
+        character.call("set_facing", false)
+        camera.position = CAMERA_HOME
+        camera.zoom = Vector2(1.035, 1.035)
+        ambient.call("set_monitor_on", false, true)
+        await _fade_to(0.0, 0.62)
 
-    character.position.x += velocity_x * delta
-    if signf(target_x - character.position.x) != direction:
-        character.position.x = target_x
-    character.flip_h = velocity_x > 0.0
-    var speed_ratio: float = clampf(absf(velocity_x) / WALK_SPEED, 0.0, 1.0)
-    walk_phase = fmod(walk_phase + absf(velocity_x) * delta / STRIDE_LENGTH * TAU, TAU)
-    if character.animation != "walk":
-        character.play("walk")
-    var normalized_phase: float = walk_phase / TAU
-    character.frame = mini(11, floori(normalized_phase * 12.0))
-    character.frame_progress = fmod(normalized_phase * 12.0, 1.0)
-    var double_step: float = sin(walk_phase * 2.0)
-    var contact: float = pow(maxf(0.0, cos(walk_phase * 2.0)), 8.0)
-    character.position.y = GROUND_Y - absf(sin(walk_phase)) * 3.4 * speed_ratio + contact * 0.9
-    character.rotation = double_step * 0.0048 * speed_ratio
-    character.scale = Vector2(1.0 + contact * 0.003, 1.0 - contact * 0.004)
-    character.offset.x = double_step * 1.3 * speed_ratio
+    if character.call("is_seated"):
+        await character.call("stand_up", WALK_STOP_X)
+    status_label.text = "准备出发……"
+    await get_tree().create_timer(0.32).timeout
+    await character.call("anticipate")
+    await get_tree().create_timer(0.10).timeout
+
+    status_label.text = "轻松走向电脑桌……"
+    var distance: float = absf(character.position.x - WALK_STOP_X)
+    var duration: float = character.call("duration_for", distance)
+    _tween_camera(CAMERA_WALK, Vector2(1.055, 1.055), duration + 0.35)
+    await character.call("walk_to_x", WALK_STOP_X, duration)
+
+    status_label.text = "在椅子前停一下……"
+    await get_tree().create_timer(0.40).timeout
+    ambient.call("pulse_seat")
+    await character.call("sit_down", SEAT_X)
+
+    status_label.text = "电脑已经打开"
+    ambient.call("set_monitor_on", true, false)
+    _tween_camera(CAMERA_DESK, Vector2(1.16, 1.16), 1.60)
+    await get_tree().create_timer(1.62).timeout
+    action_title.text = "今天从哪件事开始？"
+    action_panel.visible = true
+    sequence_running = false
 
 
-func _animate_idle() -> void:
-    var breath: float = sin(elapsed * 1.55)
-    character.position.y = GROUND_Y - breath * 0.65
-    character.rotation = sin(elapsed * 0.68) * 0.0018
-    character.scale = Vector2(1.0 - breath * 0.0012, 1.0 + breath * 0.0022)
-    character.offset = Vector2(0.0, BASE_OFFSET_Y)
-
-
-func _arrived() -> void:
-    if absf(character.position.x - DESK_X) < 3.0:
-        status_label.text = "已经走到电脑桌前"
-        action_title.text = "今天从哪件事开始？"
-        action_panel.visible = true
-    elif absf(character.position.x - DOOR_X) < 3.0:
-        status_label.text = "已经走到门口"
+func _walk_to_free_point(target_x: float) -> void:
+    if sequence_running:
+        return
+    sequence_running = true
+    action_panel.visible = false
+    ambient.call("set_monitor_on", false, false)
+    if character.call("is_seated"):
+        status_label.text = "起身……"
+        await character.call("stand_up", WALK_STOP_X)
+        await get_tree().create_timer(0.18).timeout
+    await character.call("anticipate")
+    var duration: float = character.call("duration_for", character.position.x - target_x)
+    _tween_camera(CAMERA_HOME, Vector2(1.035, 1.035), duration + 0.35)
+    status_label.text = "走过去看看……"
+    await character.call("walk_to_x", target_x, duration)
+    status_label.text = "已经走到门口" if absf(target_x - DOOR_X) < 3.0 else "停下来看看"
+    if absf(target_x - DOOR_X) < 3.0:
         action_title.text = "准备去哪里？"
         action_panel.visible = true
-    else:
-        status_label.text = "停下来看看"
+    sequence_running = false
 
 
-func _replay() -> void:
-    character.position.x = DOOR_X
-    character.position.y = GROUND_Y
-    character.flip_h = false
-    character.play("idle")
-    _animate_idle()
-    velocity_x = 0.0
-    walk_phase = 0.0
-    start_delay = 0.65
-    elapsed = 0.0
-    screenshot_saved = false
-    _set_target(DESK_X, "午后的房间")
+func _request_desk() -> void:
+    if not sequence_running:
+        call_deferred("_play_desk_sequence", false)
+
+
+func _request_door() -> void:
+    if not sequence_running:
+        call_deferred("_walk_to_free_point", DOOR_X)
+
+
+func _tween_camera(target_position: Vector2, target_zoom: Vector2, duration: float) -> void:
+    var camera_tween := create_tween().set_parallel(true)
+    camera_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+    camera_tween.tween_property(camera, "position", target_position, duration)
+    camera_tween.tween_property(camera, "zoom", target_zoom, duration)
+
+
+func _fade_to(alpha: float, duration: float) -> void:
+    var fade_tween := create_tween()
+    fade_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+    fade_tween.tween_property(fade, "color:a", alpha, duration)
+    await fade_tween.finished
+
+
+func _on_footstep() -> void:
+    ambient.call("pulse_footstep")
 
 
 func _save_demo_screenshot() -> void:
     await RenderingServer.frame_post_draw
     var image: Image = get_viewport().get_texture().get_image()
-    image.save_png(ProjectSettings.globalize_path("res://assets/art/daily/daily_room_godot_preview_v09.png"))
+    image.save_png(ProjectSettings.globalize_path("res://assets/art/daily/daily_room_godot_preview_v10.png"))

@@ -3,11 +3,34 @@ extends Node2D
 
 var elapsed: float = 0.0
 var character_x: float = 1360.0
+var monitor_strength: float = 0.0
+var footstep_pulse: float = 0.0
+var seat_pulse: float = 0.0
 
 
 func _process(delta: float) -> void:
     elapsed += delta
+    footstep_pulse = move_toward(footstep_pulse, 0.0, delta * 4.8)
+    seat_pulse = move_toward(seat_pulse, 0.0, delta * 1.7)
     queue_redraw()
+
+
+func set_monitor_on(enabled: bool, instant: bool = false) -> void:
+    var target: float = 1.0 if enabled else 0.0
+    if instant:
+        monitor_strength = target
+        return
+    var tween := create_tween()
+    tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+    tween.tween_property(self, "monitor_strength", target, 0.9)
+
+
+func pulse_footstep() -> void:
+    footstep_pulse = 1.0
+
+
+func pulse_seat() -> void:
+    seat_pulse = 1.0
 
 
 func _draw() -> void:
@@ -23,8 +46,10 @@ func _draw() -> void:
     var warmth: float = (sin(elapsed * 0.22) + 1.0) * 0.5
     draw_rect(Rect2(0.0, 0.0, 660.0, 690.0), Color(1.0, 0.88, 0.58, 0.008 + warmth * 0.012), true)
 
-    var screen_alpha: float = 0.035 + (sin(elapsed * 1.15) + 1.0) * 0.012
+    var screen_alpha: float = 0.025 + monitor_strength * 0.16 + (sin(elapsed * 1.15) + 1.0) * 0.012
     draw_rect(Rect2(247.0, 446.0, 112.0, 71.0), Color(0.56, 0.78, 0.78, screen_alpha), true)
+    if monitor_strength > 0.01:
+        _draw_ellipse(Vector2(312.0, 520.0), Vector2(122.0, 48.0), Color(0.55, 0.78, 0.78, monitor_strength * 0.035), -0.10)
 
     for index: int in range(18):
         var x: float = 105.0 + fmod(float(index * 83), 510.0)
@@ -55,7 +80,10 @@ func _draw() -> void:
     var clock_angle: float = elapsed * TAU / 60.0 - PI * 0.5
     draw_line(clock_center, clock_center + Vector2(cos(clock_angle), sin(clock_angle)) * 26.0, Color(0.28, 0.19, 0.13, 0.68), 1.5, true)
 
-    _draw_ellipse(Vector2(character_x, 793.0), Vector2(48.0, 9.0), Color(0.10, 0.075, 0.06, 0.15), 0.0)
+    var shadow_width: float = 48.0 + footstep_pulse * 5.0
+    var shadow_alpha: float = 0.15 + footstep_pulse * 0.055
+    _draw_ellipse(Vector2(character_x, 793.0), Vector2(shadow_width, 9.0 - footstep_pulse * 1.2), Color(0.10, 0.075, 0.06, shadow_alpha), 0.0)
+    _draw_ellipse(Vector2(350.0 - seat_pulse * 3.0, 790.0), Vector2(62.0 + seat_pulse * 4.0, 8.0), Color(0.10, 0.075, 0.06, seat_pulse * 0.07), 0.0)
 
 
 func _draw_ellipse(center: Vector2, radius: Vector2, color: Color, rotation: float) -> void:

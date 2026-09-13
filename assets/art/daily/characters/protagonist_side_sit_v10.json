@@ -1,0 +1,23 @@
+{
+  "columns": 4,
+  "rows": 2,
+  "frame_width": 448,
+  "frame_height": 640,
+  "frame_count": 8,
+  "fps": 8,
+  "character_height_standing": 540,
+  "foot_anchor": [
+    224,
+    610
+  ],
+  "frame_order": [
+    "stand",
+    "settle",
+    "lower_begin",
+    "lower_reach",
+    "near_seat",
+    "seated",
+    "keyboard_reach",
+    "working_idle"
+  ]
+}
