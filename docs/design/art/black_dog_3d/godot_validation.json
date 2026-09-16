@@ -1,0 +1,26 @@
+[
+  {
+    "animation_changes_pose": true,
+    "bones": 29,
+    "clips": [
+      "Idle",
+      "TailWag"
+    ],
+    "skin_loaded": true,
+    "stage": "puppy",
+    "surfaces": 6,
+    "vertex_colors_enabled": true
+  },
+  {
+    "animation_changes_pose": true,
+    "bones": 29,
+    "clips": [
+      "Idle",
+      "TailWag"
+    ],
+    "skin_loaded": true,
+    "stage": "adult",
+    "surfaces": 6,
+    "vertex_colors_enabled": true
+  }
+]

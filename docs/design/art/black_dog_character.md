@@ -21,6 +21,8 @@
 
 ## 资产
 
+3D 模型、绑骨与 Godot 接入规范见 `docs/design/art/black_dog_3d/README.md`。
+
 - 幼犬三视图：`assets/art/characters/black_dog/black_puppy_turnaround_v01.png`
 - 成年三视图：`assets/art/characters/black_dog/black_dog_adult_turnaround_v01.png`
 - 幼犬像素角色透明图：`assets/art/characters/black_dog/black_puppy_pixel_v01.png`
