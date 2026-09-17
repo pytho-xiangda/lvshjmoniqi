@@ -1,0 +1,70 @@
+{
+  "target_dimensions_xyz_m": [
+    0.4269999861717224,
+    0.972000002861023,
+    0.7329999804496765
+  ],
+  "actual_dimensions_xyz_m": [
+    0.4270000755786896,
+    0.972000002861023,
+    0.7329999804496765
+  ],
+  "clumps": {
+    "Cheek": 24,
+    "Crown": 10,
+    "Forehead": 14,
+    "Ear fringe": 30,
+    "Ear edge": 24,
+    "White ruff": 35,
+    "Body mantle": 62,
+    "Back ridge": 18,
+    "Leg feather": 80,
+    "Tail plume": 108
+  },
+  "clump_total": 405,
+  "head_pre_fit_scale": 1.18,
+  "leg_pre_fit_scale": 0.79,
+  "leg_post_fit_scale": 0.8628944432735444,
+  "eye_pre_fit_scale": 1.8,
+  "tail_core_pre_fit_diameter_scale": 2,
+  "envelope_fit_xyz": [
+    0.8647422790527344,
+    0.9583966732025146,
+    1.0922714471817017
+  ],
+  "bone_contract_unchanged": true,
+  "bone_names": [
+    "root",
+    "pelvis",
+    "spine",
+    "chest",
+    "neck",
+    "head",
+    "jaw",
+    "ear.L.base",
+    "ear.L.tip",
+    "ear.R.base",
+    "ear.R.tip",
+    "front.L.upper",
+    "front.L.lower",
+    "front.L.paw",
+    "front.R.upper",
+    "front.R.lower",
+    "front.R.paw",
+    "hind.L.upper",
+    "hind.L.lower",
+    "hind.L.paw",
+    "hind.R.upper",
+    "hind.R.lower",
+    "hind.R.paw",
+    "tail.00",
+    "tail.01",
+    "tail.02",
+    "tail.03",
+    "tail.04",
+    "tail.05"
+  ],
+  "sculpted_vertex_count": 17168,
+  "silhouette_is_opaque_geometry": true,
+  "optional_detail_fibers": true
+}

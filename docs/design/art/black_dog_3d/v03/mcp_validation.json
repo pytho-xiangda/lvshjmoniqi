@@ -1,0 +1,11 @@
+{
+  "scene": "BlackDog_V03_Delivery",
+  "bones": 29,
+  "rest_dimensions_xyz_m": [
+    0.42700016498565674,
+    0.972000002861023,
+    0.7330000996589661
+  ],
+  "imported_animation_changes_tail": true,
+  "weight_smoothing_iterations": 16
+}

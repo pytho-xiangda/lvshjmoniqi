@@ -1,0 +1,34 @@
+[
+  {
+    "stage": "puppy",
+    "version": "v02",
+    "dimensions_xyz_m": [
+      0.2842952609062195,
+      0.31784685840830207,
+      0.4413736164569855
+    ],
+    "triangles": 47757,
+    "bones": 29,
+    "embedded_images": 2,
+    "materials": 3,
+    "alpha_mode": "MASK",
+    "self_contained": true,
+    "bytes": 6119844
+  },
+  {
+    "stage": "adult",
+    "version": "v03",
+    "dimensions_xyz_m": [
+      0.4269999861717224,
+      0.7329999804496765,
+      0.972000002861023
+    ],
+    "triangles": 51396,
+    "bones": 29,
+    "embedded_images": 2,
+    "materials": 3,
+    "alpha_mode": "MASK",
+    "self_contained": true,
+    "bytes": 4967248
+  }
+]

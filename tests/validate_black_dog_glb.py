@@ -6,7 +6,8 @@ import json
 ROOT = Path(__file__).resolve().parents[1]
 reports = []
 for stage in ('puppy', 'adult'):
-    path = ROOT / 'assets/models/black_dog/v02' / (stage + '_black_dog_v02.glb')
+    asset_version = 'v02' if stage == 'puppy' else 'v03'
+    path = ROOT / 'assets/models/black_dog' / asset_version / (stage + '_black_dog_' + asset_version + '.glb')
     data = path.read_bytes()
     magic, version, size = struct.unpack_from('<4sII', data)
     assert magic == b'glTF' and version == 2 and size == len(data)
@@ -21,15 +22,20 @@ for stage in ('puppy', 'adult'):
     assert len(masked) == 1 and masked[0].get('doubleSided')
     assert len(doc['materials']) == 3
     triangles = 0
+    positions = []
     for mesh in doc['meshes']:
         for primitive in mesh['primitives']:
             assert {'POSITION', 'NORMAL', 'TEXCOORD_0', 'JOINTS_0', 'WEIGHTS_0'} <= primitive['attributes'].keys()
             assert primitive.get('mode', 4) == 4
             triangles += doc['accessors'][primitive['indices']]['count'] // 3
+            positions.append(doc['accessors'][primitive['attributes']['POSITION']])
     assert triangles < 60000
-    reports.append({'stage': stage, 'triangles': triangles, 'bones': 29,
+    dimensions = [max(p['max'][i] for p in positions)-min(p['min'][i] for p in positions) for i in range(3)]
+    if stage == 'adult':
+        assert all(abs(actual-target)<0.0001 for actual,target in zip(dimensions,[.427,.733,.972])), dimensions
+    reports.append({'stage': stage, 'version': asset_version, 'dimensions_xyz_m': dimensions, 'triangles': triangles, 'bones': 29,
                     'embedded_images': len(doc['images']), 'materials': 3,
                     'alpha_mode': 'MASK', 'self_contained': True, 'bytes': len(data)})
-output = ROOT / 'docs/design/art/black_dog_3d/v02/glb_validation.json'
+output = ROOT / 'docs/design/art/black_dog_3d/v03/glb_validation.json'
 output.write_text(json.dumps(reports, indent=2), encoding='utf-8')
 print('BLACK_DOG_GLB_OK', json.dumps(reports))

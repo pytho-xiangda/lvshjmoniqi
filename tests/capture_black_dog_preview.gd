@@ -18,7 +18,8 @@ func _capture() -> void:
         await RenderingServer.frame_post_draw
         var screenshot := root.get_texture().get_image()
         var label: String = "puppy" if stage == 0 else "adult"
-        var path: String = "res://docs/design/art/black_dog_3d/v02/%s_godot.png" % label
+        var version: String = "v02" if stage == 0 else "v03"
+        var path: String = "res://docs/design/art/black_dog_3d/%s/%s_godot.png" % [version, label]
         assert(screenshot.save_png(path) == OK)
         print("CAPTURE_OK ", label)
     scene.free()

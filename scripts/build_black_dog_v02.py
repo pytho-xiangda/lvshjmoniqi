@@ -272,7 +272,7 @@ def make(stage):
     return rig,body
 
 
-def add_fuzz(body,H,HS,muzzle,coat_color,stage):
+def add_fuzz(body,H,HS,muzzle,coat_color,stage,count=8500,strand_scale=1.0):
     """Layered alpha-cutout hair cards with inherited skin weights and normals."""
     random.seed(180 if stage=='puppy' else 181)
     body.data.calc_loop_triangles()
@@ -281,7 +281,7 @@ def add_fuzz(body,H,HS,muzzle,coat_color,stage):
     for t in triangles:
         total+=t.area;weights.append(total)
     vs=[];fs=[];vg=[];colors=[];normals=[];uvs=[]
-    for i in range(8500):
+    for i in range(count):
         t=triangles[bisect.bisect_left(weights,random.random()*total)]
         a,b,c=[body.data.vertices[j] for j in t.vertices]
         u,v=random.random(),random.random()
@@ -298,8 +298,8 @@ def add_fuzz(body,H,HS,muzzle,coat_color,stage):
         if face and p.z>H.z+.040:direction=Vector((p.x*2,.08,1))
         tangent=(direction-n*direction.dot(n)).normalized()
         side=n.cross(tangent).normalized()
-        length=random.uniform(.036,.069)*(.80 if face else 1)
-        width=random.uniform(.010,.020)*(.85 if face else 1)
+        length=random.uniform(.036,.069)*(.80 if face else 1)*strand_scale
+        width=random.uniform(.010,.020)*(.85 if face else 1)*strand_scale
         base=p-n*.001
         mid=p+tangent*length*.46+n*(.004 if face else .008)
         end=p+tangent*length+n*(.007 if face else .015)

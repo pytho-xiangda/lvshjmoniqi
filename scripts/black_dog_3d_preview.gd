@@ -3,7 +3,7 @@ extends Node3D
 
 const MODELS: Array[String] = [
     "res://assets/models/black_dog/v02/puppy_black_dog_v02.glb",
-    "res://assets/models/black_dog/v02/adult_black_dog_v02.glb",
+    "res://assets/models/black_dog/v03/adult_black_dog_v03.glb",
 ]
 var model: Node3D
 var animation_player: AnimationPlayer
@@ -105,7 +105,7 @@ func _play_clip(requested: String) -> void:
                 animation_player.get_animation(actual).loop_mode = Animation.LOOP_LINEAR
                 animation_player.play(actual)
                 break
-    status_label.text = "v02 %s · %s · 29 bones" % ["幼犬" if current_stage == 0 else "成年犬", requested]
+    status_label.text = "%s · %s · 29 bones" % ["v02 幼犬" if current_stage == 0 else "v03 成年犬", requested]
 
 
 func _update_camera() -> void:

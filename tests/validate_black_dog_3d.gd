@@ -9,7 +9,8 @@ func _initialize() -> void:
 func _validate() -> void:
     var reports: Array[Dictionary] = []
     for stage: String in ["puppy", "adult"]:
-        var path: String = "res://assets/models/black_dog/v02/%s_black_dog_v02.glb" % stage
+        var version: String = "v02" if stage == "puppy" else "v03"
+        var path: String = "res://assets/models/black_dog/%s/%s_black_dog_%s.glb" % [version, stage, version]
         var packed := load(path) as PackedScene
         assert(packed != null, "Missing imported model: " + path)
         var instance := packed.instantiate()
@@ -28,6 +29,9 @@ func _validate() -> void:
         for entry: Node in meshes:
             var mesh_instance := entry as MeshInstance3D
             assert(mesh_instance.skin != null and mesh_instance.skin.get_bind_count() > 0)
+            if stage == "adult":
+                var size := mesh_instance.mesh.get_aabb().size
+                assert(size.is_equal_approx(Vector3(0.427, 0.733, 0.972)), "Incorrect adult dimensions: " + str(size))
             surfaces += mesh_instance.mesh.get_surface_count()
             for surface in range(mesh_instance.mesh.get_surface_count()):
                 var material := mesh_instance.mesh.surface_get_material(surface) as BaseMaterial3D
@@ -60,12 +64,12 @@ func _validate() -> void:
             for i in range(skeleton.get_bone_count()):
                 assert(skeleton.get_bone_global_pose(i).origin.is_finite())
         assert(animations.size() == 2, "Expected two usable clips")
-        reports.append({"stage": stage, "bones": skeleton.get_bone_count(), "surfaces": surfaces,
+        reports.append({"stage": stage, "version": version, "bones": skeleton.get_bone_count(), "surfaces": surfaces,
             "clips": animations, "skin_loaded": true, "animation_changes_pose": true,
             "vertex_colors_enabled": true, "textured_surfaces": textured_surfaces,
             "alpha_depth_prepass_surfaces": hair_surfaces})
         instance.free()
-    var output := FileAccess.open("res://docs/design/art/black_dog_3d/v02/godot_validation.json", FileAccess.WRITE)
+    var output := FileAccess.open("res://docs/design/art/black_dog_3d/v03/godot_validation.json", FileAccess.WRITE)
     output.store_string(JSON.stringify(reports, "  "))
     print("BLACK_DOG_VALIDATION_OK ", JSON.stringify(reports))
     quit(0)
