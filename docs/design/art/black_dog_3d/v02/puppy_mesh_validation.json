@@ -1,0 +1,17 @@
+{
+  "stage": "puppy",
+  "vertices": 55602,
+  "triangles": 47757,
+  "bones": 29,
+  "max_weights": 4,
+  "unweighted": 0,
+  "bad_weight_sums": 0,
+  "materials": 3,
+  "uv_layers": 1,
+  "actions": [
+    "Idle",
+    "TailWag"
+  ],
+  "height_m": 0.3178,
+  "pose_test_finite": true
+}

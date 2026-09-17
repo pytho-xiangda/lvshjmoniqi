@@ -2,8 +2,8 @@ extends Node3D
 ## Standalone asset viewer; leaves the 2D game's main scene unchanged.
 
 const MODELS: Array[String] = [
-    "res://assets/models/black_dog/puppy_black_dog_v01.glb",
-    "res://assets/models/black_dog/adult_black_dog_v01.glb",
+    "res://assets/models/black_dog/v02/puppy_black_dog_v02.glb",
+    "res://assets/models/black_dog/v02/adult_black_dog_v02.glb",
 ]
 var model: Node3D
 var animation_player: AnimationPlayer
@@ -16,15 +16,16 @@ var status_label: Label
 
 
 func _ready() -> void:
+    get_viewport().msaa_3d = Viewport.MSAA_4X
     var environment_node := WorldEnvironment.new()
     var environment := Environment.new()
     environment.background_mode = Environment.BG_COLOR
-    environment.background_color = Color("e7decc")
+    environment.background_color = Color("bac6c1")
     environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
     environment.ambient_light_color = Color("c7d2df")
-    environment.ambient_light_energy = 0.45
-    environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-    environment.tonemap_exposure = 0.85
+    environment.ambient_light_energy = 0.7
+    environment.tonemap_mode = Environment.TONE_MAPPER_LINEAR
+    environment.tonemap_exposure = 1.0
     environment_node.environment = environment
     add_child(environment_node)
     var light := DirectionalLight3D.new()
@@ -33,12 +34,17 @@ func _ready() -> void:
     light.light_energy = 1.0
     light.shadow_enabled = true
     add_child(light)
+    var fill := DirectionalLight3D.new()
+    fill.rotation_degrees = Vector3(-30.0, 125.0, 0.0)
+    fill.light_color = Color("c2d6ee")
+    fill.light_energy = 0.65
+    add_child(fill)
     var floor_mesh := MeshInstance3D.new()
     var plane := PlaneMesh.new()
     plane.size = Vector2(200.0, 200.0)
     floor_mesh.mesh = plane
     var floor_material := StandardMaterial3D.new()
-    floor_material.albedo_color = Color("e7decc")
+    floor_material.albedo_color = Color("788781")
     floor_material.roughness = 0.9
     floor_mesh.material_override = floor_material
     floor_mesh.position.y = -0.003
@@ -99,11 +105,11 @@ func _play_clip(requested: String) -> void:
                 animation_player.get_animation(actual).loop_mode = Animation.LOOP_LINEAR
                 animation_player.play(actual)
                 break
-    status_label.text = "%s · %s · 29 bones" % ["幼犬" if current_stage == 0 else "成年犬", requested]
+    status_label.text = "v02 %s · %s · 29 bones" % ["幼犬" if current_stage == 0 else "成年犬", requested]
 
 
 func _update_camera() -> void:
-    var height: float = 0.35 if current_stage == 0 else 0.75
+    var height: float = 0.32 if current_stage == 0 else 0.74
     var target := Vector3(0.0, height * 0.5, 0.0)
     camera.size = height * 1.55
     camera.position = target + Vector3(sin(orbit_angle) * height * 3.0, height * 0.35, cos(orbit_angle) * height * 3.0)

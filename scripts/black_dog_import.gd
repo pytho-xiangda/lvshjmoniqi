@@ -14,4 +14,10 @@ func _post_import(scene: Node) -> Object:
             if material != null and not colors.is_empty():
                 material.vertex_color_use_as_albedo = true
                 material.vertex_color_is_srgb = false
+            if material != null and material.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR:
+                # Mip-filtered hair uses a depth prepass and soft alpha in Godot;
+                # hard clipping either erases distant strands or aliases them.
+                material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+                material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_DEPTH_PRE_PASS
+                material.alpha_antialiasing_mode = BaseMaterial3D.ALPHA_ANTIALIASING_OFF
     return scene

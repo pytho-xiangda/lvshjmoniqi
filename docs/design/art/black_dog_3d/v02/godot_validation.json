@@ -1,0 +1,30 @@
+[
+  {
+    "alpha_depth_prepass_surfaces": 1,
+    "animation_changes_pose": true,
+    "bones": 29,
+    "clips": [
+      "Idle",
+      "TailWag"
+    ],
+    "skin_loaded": true,
+    "stage": "puppy",
+    "surfaces": 3,
+    "textured_surfaces": 3,
+    "vertex_colors_enabled": true
+  },
+  {
+    "alpha_depth_prepass_surfaces": 1,
+    "animation_changes_pose": true,
+    "bones": 29,
+    "clips": [
+      "Idle",
+      "TailWag"
+    ],
+    "skin_loaded": true,
+    "stage": "adult",
+    "surfaces": 3,
+    "textured_surfaces": 3,
+    "vertex_colors_enabled": true
+  }
+]

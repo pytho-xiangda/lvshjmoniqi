@@ -1,0 +1,22 @@
+[
+  {
+    "stage": "puppy",
+    "triangles": 47757,
+    "bones": 29,
+    "embedded_images": 2,
+    "materials": 3,
+    "alpha_mode": "MASK",
+    "self_contained": true,
+    "bytes": 6119844
+  },
+  {
+    "stage": "adult",
+    "triangles": 47788,
+    "bones": 29,
+    "embedded_images": 2,
+    "materials": 3,
+    "alpha_mode": "MASK",
+    "self_contained": true,
+    "bytes": 6144100
+  }
+]
